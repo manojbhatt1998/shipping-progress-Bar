@@ -1,0 +1,35 @@
+$("input.input-group-field").keyup(function(){   
+      $(".append_data").hide();
+   var getsearchvalue = $(this).val();
+  if ($(this).val().length > 0) {
+    $(".append_data").show();
+   }else{
+     $(".append_data").hide();
+   }
+   
+jQuery.getJSON("/search/suggest.json", {
+  "q": getsearchvalue,
+  "resources": {
+    "type": "product",
+    "limit": 4,
+    "options": {
+      "unavailable_products": "last",
+      "fields": "title,product_type,variants.title"
+    }
+  }
+}).done(function(response) {
+   var suggestion = '';
+  var productSuggestions = response.resources.results.products;
+  jQuery.each( productSuggestions, function( i, value ) {
+  var title = response.resources.results.products[i].title.toLowerCase();
+  suggestion += '<a href="'+response.resources.results.products[i].url+'">'+response.resources.results.products[i].title+'</a><br>'
+   $(".append_data").html(suggestion);
+    });
+    
+  if (productSuggestions.length > 0) {
+     // console.log(productSuggestions);
+    //var firstProductSuggestion = productSuggestions[0];
+     //console.log(firstProductSuggestion.title);
+  }
+});
+}); 
