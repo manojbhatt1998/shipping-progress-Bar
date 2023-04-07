@@ -1,0 +1,59 @@
+cart get data whole code
+
+$(".product-sticky-cart button.qty-selector__add-to-cart.new_add_tocart_cr").click(function(e){
+  e.preventDefault();
+  var jsonObj = [];
+  var current_variant = $(this).attr("main-product-id");
+  var qtyval = $(".product-sticky-cart input.qty-selector__input.js-quantity-input").val();
+  var item = {}
+  item ["id"] = parseInt(current_variant);
+  item ["quantity"] = qtyval;
+  jsonObj.push(item);
+  $.ajax({
+    type: "POST", 
+    url: '/cart/add.js',
+    data: {items: jsonObj },
+    dataType: "json",
+    success: function(carttttt) { 
+
+      jQuery.getJSON('/cart.js', function(cartData) {
+        for (var i = 0; i < cartData.items.length; i++) {
+
+          var productHandle = cartData.items[i]['handle'];
+          var productQty = cartData.items[i]['quantity'];
+          var productVariant = cartData.items[i]['variant_id'];
+
+          if(productVariant == current_variant){
+            var productPrice = Shopify.formatMoney(cartData.items[i]['line_price']);
+            var $dom = {};
+
+            $.get("/products/" + productHandle + "?view=atc").done(function (html) {
+
+              $(".js-atc-item").find(".js-atc-image, .js-atc-details").remove();
+              $(".js-atc-item").prepend(html);
+              $(".js-atc-quantity").html(productQty);
+              $(".js-atc-price").html(productPrice);
+              $(".js-atc-item").find(".js-atc-variant").html($(".js-product-variant-id :selected").text());
+              $('.modal').show("modal-atc");
+              $('.overlay').show();
+
+              var count = cartData.item_count;
+              if (count > 0) {
+                $(".js-cart-count").addClass("header__cart-quantity--full");
+              } else {
+                $(".js-cart-count").removeClass("header__cart-quantity--full");
+              }
+
+              if (count > 99) {
+                count = "99+";
+              }
+              $(".js-cart-count").html(count);
+              var total = Shopify.formatMoney(cartData.total_price, shop.moneyWithCurrencyFormat);
+              $('.js-cart-total').html(total);
+            });
+          }
+        }
+      });
+    },
+  });
+});
