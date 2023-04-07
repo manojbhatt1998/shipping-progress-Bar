@@ -1,0 +1,25 @@
+https://www.huratips.com/tech-tips/how-to-add-infinite-scroll-pagination-to-shopify-collection-pages.html
+
+{% if template contains 'collection' %}{{ 'https://cdn.shopify.com/s/files/1/0382/4185/files/ajaxinate.js?937' | script_tag }}{% endif %}
+
+<div id="Huratips-Loop" >
+</div>
+<div id="Huratips-Pagination">
+    {% if paginate.next %}
+    <a href="{{ paginate.next.url }}">Loading More</a>
+    {% endif %}  
+</div>
+
+
+<script>
+function callbackInfiniteScroll(){}
+  document.addEventListener("DOMContentLoaded", function() {
+    var endlessScroll = new Ajaxinate({
+      container: '#Huratips-Loop',
+      pagination: '#Huratips-Pagination',
+      loadingText: '<center><img height="70" width="70" src="https://cdn.shopify.com/s/files/1/0402/0253/5074/files/orange_circles.gif?100"></center>',
+      callback: callbackInfiniteScroll
+    });
+  });
+</script>
+
