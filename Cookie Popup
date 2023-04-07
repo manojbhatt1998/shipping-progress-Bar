@@ -1,0 +1,48 @@
+<script>
+//////////////////////////////// cookie of popup js email popup/////////////////////////////////
+function getCookie(cname) {
+var name = cname + "=";
+var ca = document.cookie.split(';');
+for (var i = 0; i < ca.length; i++) {
+var c = ca[i];
+while (c.charAt(0) == ' ') {
+c = c.substring(1);
+}
+if (c.indexOf(name) == 0) {
+return c.substring(name.length, c.length);
+}
+}
+return "";
+}
+//////////////////////////////////////// popup js email popup //////////////////////////////////
+function setCookie(cname, cvalue, exdays) {
+var d = new Date();
+// 1 minute = 60 * 1000
+d.setTime(d.getTime() + (exdays*24*60*60*1000));
+var expires = "expires=" + d.toUTCString();
+document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+// check if popupCookie is set or not and hide popup form if popupCookie is set
+window.addEventListener('load', (event) => {
+if( getCookie('popupCookie') != 'submited'){
+$(".custom_popup").show();
+}
+const cat = localStorage.getItem('myCat');
+if(cat == 'Tom'){
+$(".custom_popup").hide();
+}
+});
+$("span.popup_cross_btn").click(function(){
+$(".custom_popup").fadeOut(1000);
+//sets the coookie to 24hrs if the popup is submited (whole numbers = days)
+setCookie('popupCookie', 'submited');
+// alert("submit");
+});
+//permanent created if subscribe
+$("button.btn.poup_btn").click(function(){
+localStorage.setItem('myCat', 'Tom');
+$(".custom_popup").hide();
+});
+////////////////////////End cookie of emailpopup/////////////////////////////////////////////////
+</script>
