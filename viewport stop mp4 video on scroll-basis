@@ -1,0 +1,40 @@
+viewport stop mp4 video on scroll-basis
+
+<script>
+//viewport code
+  function isInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+    );
+  }
+var message = "";
+const box = document.querySelector('.Custom-video-with-Icon-Wrapper');
+document.addEventListener('scroll', function () {
+    const messageText = isInViewport(box) ?
+    playmp4video() :
+    stopmp4video();
+    message.textContent = messageText;
+}, {
+    passive: true
+});
+
+  //functions play/pause video
+  function playmp4video(){
+    $(".videoo").hide();
+    document.querySelector('#mp4_video').play();
+    $(".Custom-video-with-Icon-Wrapper .mp4_video").css("opacity","1");
+  }
+  function stopmp4video(){
+    document.querySelector('#mp4_video').pause();
+    $(".Custom-video-with-Icon-Wrapper .mp4_video").css("opacity","1");
+  }
+
+  $(document).on("click","img.icon_custom_play", function(){
+    playmp4video()
+  }); 
+</script>
