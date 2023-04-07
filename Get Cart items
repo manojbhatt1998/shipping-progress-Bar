@@ -1,0 +1,85 @@
+
+function append_data(){
+   $.ajax({
+       type: 'get',
+       url: '/cart.js',
+       dataType: 'json',
+       success: function (cartData) {
+          var count_items =  cartData.item_count;
+          $("span.cart-link__count").text(count_items);
+          $(".mini-cart-subtotal span").text('£'+cartData.total_price/100);
+          $(".miniheadtext").text('MY BAG,'+count_items+' ITEMS');
+         var cart_list = [];
+         $.each(cartData.items, function(i, items) {
+          var item_id = cartData['items'][i]['id'];    
+          ///var cart_total cartData['items'][i]['id'];  
+          var productVariant = cartData.items[i]['variant_id']; 
+          var product_title = cartData['items'][i]['product_title'];
+          var variant_title = cartData['items'][i]['variant_title'];     
+          var product_handle = cartData['items'][i]['handle'];
+          var quantity = cartData['items'][i]['quantity'];
+          var line_price = cartData['items'][i]['price']/100;
+          var url = cartData['items'][i]['url'];
+          var image_url = cartData['items'][i]['image'];
+          var variants = cartData['items'][i]['variant_options'];
+           if (productVariant == 'Gift Wrap' ) {
+            var product_url = productVariant;
+          } else {  
+             var product_url =
+                 ' <a href="https://lobowolf.co.uk' + url+ '"  class="cart__product-image lazypreload lazyloaded" style="background-image: url('+image_url+ ');"></a>';  
+            }
+             var options = [];
+               for ( var o = 0; o < variants.length; o++ ) {
+                 var selected = cartData['items'][i]['variant_options'][o];
+                 if ( selected !== 'Default Title' ) {
+                    options.push( selected + '' );
+              }
+         }
+             var selected_options = options.join('');
+                           if(item_id == item_id){
+                           cart_list.push('<div class="cart__item ajaxcart__product"> <div class="row mini-cart-product">  <div class="cart__row-product ajaxcart__row-product"> <div class="cart__product-image-wrap loaded"><a href="https://lobowolf.co.uk' + url+ '"  class="cart__product-image lazypreload lazyloaded" style="background-image: url('+image_url+');"></a></div> <div class="ajaxcart__item-content"> <div class="grid grid--small"><div class="grid__item one-whole"><div><span class="minicart__item-price">£'+line_price.toFixed(2)+'</span></div> <a href="/products/originals-shorts?variant=40236249022645" class="minicart__product-name">'+product_title+'</a><div class="wrap_title_input"><div class="cart__item-subtitle cart__item-subtitle--inline">'+variant_title+'</div><div class="miniqty_input"  data-key="40236299649205" value="3">  <label class="Qty_label">Qty:<span class="qty_value">'+quantity+' </span></label></div></div> <div class="qty_item grid__item one-quarter text-right"><button type="button" class="minicart_drawer cart__remove text-link" data-id="'+item_id+'"> <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 16 20"  height="24"  width="24">  <path d="M0 5h16v2H0V5zm14 3.07v9.27c0    1.47-1.15 2.66-2.574 2.66H4.574C3.153 20 2 18.797 2 17.34V8.07h12zM4 17.15c0 .462.363.85.803.85h6.394c.446 0 .803-.381.803-.85V8.1H4v9.05zM6 9h1v8H6V9zm3 0h1v8H9V9zM7 0h2c1.656 0 3 1.339 3 3v1.038H4V3c0-1.656 1.339-3 3-3zm3 3.999V3c0-.554-.446-1-1-1H7c-.554 0-1 .446-1 1v.999h4z" fill="#666"fill-rule="evenodd"></path></svg></button></div></div></div></div></div></div></div></div></div>');
+           } 
+     });
+      
+        $(".mini-cart-items").empty();
+        setTimeout(function() {
+        $('.mini-cart-items').append( cart_list.join(''));
+         $("#mini-cart").show();
+          if(count_items == 0){
+           $(".minicart__empty-text").show();
+           }
+        }, 1000); 
+        }
+    });
+ }
+
+$(document).on('click','button.minicart_drawer.cart__remove.text-link',function(e){
+   e.preventDefault();
+    var remove_var_id = $(this).attr("data-id");  
+     $.ajax({
+      type: 'POST',
+      url: '/cart/change.js',
+      data: {
+        quantity:0,
+        id: remove_var_id
+      },
+      dataType: 'json',
+      success: function(cart) {
+        append_data();
+      }
+     });
+});
+
+$(document).on('click','button.btn.btn--full.add-to-cart',function(e){
+    e.preventDefault();
+    var var_id = $("input[name='data-cart-id']").attr("value");
+    $.ajax({
+     type: 'POST',
+     url: '/cart/add.js',
+     data: { quantity: 1 , id: var_id },
+     success: function (data) { 
+     //alert("yesss"); 
+      append_data();
+  }  
+  });   
+});   //mini drawer end 
