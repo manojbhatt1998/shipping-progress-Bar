@@ -1,0 +1,20 @@
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+<div id="re-captcha"></div>
+<script>
+var actCallback = function (response) {
+$('#contactFormSubmit').prop("disabled", false);
+$('#re-captcha').remove();
+};
+var expCallback = function() {
+$('#contactFormSubmit').prop("disabled", true);
+};
+
+var onloadCallback = function () {
+var widget = grecaptcha.render(document.getElementById("re-captcha"), {
+'sitekey' : "6LeoeSkTAAAAAA9rkZs5oS82l69OEYjKRZAiKdaF", // Sitekey, Retrieving from reCaptcha
+'theme': "light",
+'callback' : actCallback,
+'expired-callback': expCallback,
+});
+}
+</script>
