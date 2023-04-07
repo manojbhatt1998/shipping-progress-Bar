@@ -1,0 +1,113 @@
+Free shipping loader 
+
+<script>
+// get freeshipping_value from user
+var freeshipping_value = {{free_shipping_amount}};
+var freeshipping_value_add_zero = freeshipping_value + "00";
+//alert(freeshipping_value_add_zero);
+$(document).ajaxSuccess(function( event, xhr, settings ) {
+//function SetDefaultSecond(){
+$.ajax({
+type: 'GET',
+url: '/cart.js',
+dataType: 'json',
+success: function(cart){
+// run the calculator with a target price of $75
+var cart_total = Math.floor(cart.total_price);
+console.log("cart_total " + cart_total);
+// calculate how far progress is from the total as a percentage
+var percentage = Math.round(100 * cart_total / freeshipping_value_add_zero );
+var targetVal = freeshipping_value_add_zero;
+var percentage_add = percentage +"%";
+console.log("percentage" + percentage_add);
+var progressBar = $('span.cart-shippingThreshold__progress').css("width",percentage_add);
+var newProgressNum = (cart_total - targetVal) / 100;
+var newProgressNum1 = (newProgressNum).toFixed(2);
+var removeSubtractsymbol = newProgressNum1.split('-');
+console.log("Away " + removeSubtractsymbol[1])
+var hundred = "100";
+if(percentage > hundred){
+$("p.cart-shipping__success").show();
+$("p.cart-shipping__numOuter").hide();
+}
+if(percentage < hundred){
+$("p.cart-shipping__success").hide();
+$("p.cart-shipping__numOuter").show();
+$("span.cart-shipping__num").text(removeSubtractsymbol[1]);
+}
+}
+});
+//};
+});
+//onload get and set loader
+$(document).ready(function(){
+$.ajax({
+type: 'GET',
+url: '/cart.js',
+dataType: 'json',
+success: function(cart){
+// run the calculator with a target price of $75
+var cart_total = Math.floor(cart.total_price);
+console.log("cart_total " + cart_total);
+// calculate how far progress is from the total as a percentage
+var percentage = Math.round(100 * cart_total / freeshipping_value_add_zero );
+var targetVal = freeshipping_value_add_zero;
+var percentage_add = percentage +"%";
+console.log("percentage" + percentage_add);
+var progressBar = $('span.cart-shippingThreshold__progress').css("width",percentage_add);
+var newProgressNum = (cart_total - targetVal) / 100;
+var newProgressNum1 = (newProgressNum).toFixed(2);
+var removeSubtractsymbol = newProgressNum1.split('-');
+console.log("Away " + removeSubtractsymbol[1])
+var hundred = "100";
+if(percentage > hundred){
+$("p.cart-shipping__success").show();
+$("p.cart-shipping__numOuter").hide();
+}
+if(percentage < hundred){
+$("p.cart-shipping__success").hide();
+$("p.cart-shipping__numOuter").show();
+$("span.cart-shipping__num").text(removeSubtractsymbol[1]);
+}
+}
+});
+});
+</script>
+
+//////////////////////////////////////////////////////////////HTML /////////////////////////////////////////
+<!-- Free shipping progress markup -->
+{% if free_shipping_amount != blank %}
+<div class="cart-shipping__wrapper">
+<p class="cart-shipping__numOuter">You're $<span class="cart-shipping__num"></span> away from free shipping!</p>
+<p class="cart-shipping__success">You're eligible for Free Shipping!</p>
+<div class="cart-shippingThreshold__bar">
+<span class="cart-shippingThreshold__progress"></span>
+</div>
+</div>
+{% endif %}
+///////////////////////////////////////////// free shipping progress bar CSS//////////////////////
+/* Style the progress bar */
+.cart-shipping__wrapper {
+padding: 15px;
+max-width: 700px;
+margin: 0 auto;
+}
+
+.cart-shippingThreshold__bar {
+position: relative;
+/* Progress bar background color */
+background-color: #d8d8d8;
+height: 1rem;
+}
+
+.cart-shippingThreshold__progress {
+position: absolute;
+top: 0;
+left: 0;
+min-width: 0;
+max-width: 100%;
+height: 100%;
+display: block;
+/* Progress bar fill color */
+background-color: tomato;
+}
