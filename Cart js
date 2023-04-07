@@ -1,0 +1,52 @@
+$(".quick-add button.quick-add__submit").on("click",function(){
+   var var_id = $(this).prev(".quick_add_id").attr("value");
+   var product_title  = $(this).parents().find(".quick-add").attr("data-title"); 
+     $.ajax({
+        type: 'POST',
+        url: '/cart/add.js',
+        data: {
+        quantity:1,
+        id: var_id
+       },
+       dataType: 'json',
+      success: function(cart) {
+            $(".modal_collection").show();
+            jQuery.getJSON('/cart.js', function(cartData) {  
+                var total_item_cart = cartData.item_count;
+                $('.cart-count-bubble span').text(total_item_cart);  
+                var total_cart_amt = Shopify.formatMoney(cartData.total_price);
+                $("span.tt-price.full-total-js").text(total_cart_amt);   
+                
+           for (var i = 0; i < cartData.items.length; i++) {
+                var productHandle = cartData.items[i]['handle'];
+                var productQty = cartData.items[i]['quantity'];
+                var price = cartData.items[i]['line_price'];
+                var variant_price = Shopify.formatMoney(price);
+                var productVariantid = cartData.items[i]['variant_id'];
+                var producttitle = product_title;
+                var var_image = cartData.items[i]['image'];
+                
+           
+              if (productVariantid == var_id) {
+                 // console.log("productVariantid--"+productVariantid);  
+                 // console.log("productQty--"+productQty);  
+                 // console.log("variant_price--"+variant_total_price);    
+                 // console.log("total_item_cart--" + total_item_cart); 
+                 // console.log("total_item_amt---"+total_item_amt);
+                 console.log("var_image--" +var_image); 
+
+               $(".tt-modal-messages").html("<i class='icon-f-68'>Added to cart successfully!</i>");                  
+               $(".tt-modal-product .tt-img img").attr("src",var_image);
+               $(".tt-title.tt-title-js").text(producttitle);   
+               $(".tt-qty span").text(productQty);   
+               $(".tt-product-total span.tt-price").text(variant_price);   
+               $("span.modal-total-quantity").text(total_item_cart); 
+
+           } 
+          }
+         });
+      }
+    });          
+});
+
+
