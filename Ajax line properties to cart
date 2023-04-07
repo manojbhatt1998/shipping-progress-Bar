@@ -1,0 +1,43 @@
+var data =
+  {
+    quantity: 1,
+    id: 39335190495409,
+    properties: {
+      'foo': 'bar',
+      //'gift_wrap': true
+    }
+  }
+
+ 
+$.ajax({
+        type: 'POST',
+        url: '/cart/add.js',
+        data: data ,
+        dataType: 'json'
+
+    });
+
+//******************whole code*********************
+  var data = {
+    quantity: 1,
+    id: 40070308593832,
+    properties: { 'Custom_Bundle' : "suss" },
+     async:false
+  };
+
+  jQuery.ajax({
+    type: 'POST',
+    url: '/cart/add.js',
+    data: data,
+    dataType: 'json',
+    success: function() {
+      jQuery.getJSON('/cart.js', function(cart) {
+       alert("sucesss");
+        //$('.cart-count').text(cart.item_count);
+      });
+    },
+    error: function(XMLHttpRequest, textStatus) {
+      alert('Error adding to cart: ' + textStatus);
+    }
+  });
+
