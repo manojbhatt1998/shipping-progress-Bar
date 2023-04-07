@@ -1,0 +1,38 @@
+bundle cart item
+
+$("button.btn.product-form__cart-submit.btn").on("click",function(){
+jsonObj = [];
+$(".Bundle_product input:checked").each(function(){
+var total_ids= $(this).parents(".Bundle_product").attr("product_id");
+console.log(total_ids);
+item = {}
+item ["id"] = parseInt(total_ids);
+item ["quantity"] = 1;
+jsonObj.push(item);
+});
+
+jQuery.post('/cart/add.js', {
+items: jsonObj
+});
+});
+
+
+/////////////////////////////////////bundle code 2////////////////
+var array11 = ['39642254508125','39642254540893','39642254573661','39642254606429','39642254770269'];
+jsonobj = [];
+for (var i = 0; i < array11.length; i++) {
+console.log(array11[i]);
+item={};
+item['id']= array11[i];
+item['quantity'] = 1;
+jsonobj.push(item);
+}
+jQuery.post('/cart/add.js', {
+items:jsonobj,
+dataType: 'json',
+success: function() { 
+jQuery.getJSON('/cart.js', function(cart) {
+alert('There are now ' + cart.item_count + ' items in the cart.');
+} );
+}
+});
