@@ -1,0 +1,105 @@
+Bundle product code
+$(document).on("click","button.btn.product-form__cart-submit.btn" ,function(e){
+e.preventDefault();
+var defaultid = $('select#ProductSelect-product-template option:selected').attr('value');
+//console.log(default_ids);
+jsonObj = [];
+$(".Bundle_product input:checked").each(function(){
+var total_ids = $(this).parents(".Bundle_product").attr("product_id");
+//console.log(total_ids);
+item = {}
+item ["id"] = parseInt(total_ids);
+item ["quantity"] =1;
+jsonObj.push(item);
+
+});
+$.ajax({
+type: 'POST',
+url: '/cart/add.js',
+dataType: 'json',
+data: { quantity: 1 , id: defaultid },
+success: function(){
+
+jQuery.post('/cart/add.js', {
+items: jsonObj,
+success: function(data) {
+console.log("SUCCESSFULLY ADDED BUNDLE PRODUCTS");
+}
+});
+}
+});
+});
+
+/////////////////////////////////////bundle code2/////////////////////////////////////////////////
+var array11 = ['39642254508125','39642254540893','39642254573661','39642254606429','39642254770269'];
+jsonobj = [];
+for (var i = 0; i < array11.length; i++) {
+  console.log(array11[i]);
+  item={};
+  item['id']= array11[i];
+  item['quantity'] = 1;
+  jsonobj.push(item);
+}
+jQuery.post('/cart/add.js', {
+  items:jsonobj
+}).done(function() {
+   alert('dd');
+  });
+
+ ////////////////////////////////////bundle code2 End////////////////////////////////////////////
+<!--     product bundle with block settings -->
+      <div class="Bundle_Product_blocks">    
+        {% for block in section.blocks %}  
+        {% if block.settings.product_id != blank %}
+        {%- assign productsname = all_products[block.settings.product_id]-%}
+        {%- assign products_handle = all_products[block.settings.product_id].handle-%}
+        {% assign getvar_id = all_products[products_handle].selected_or_first_available_variant %} 
+        <div class="Bundle_product" product_id="{{getvar_id.id}}"> 
+          <span> {{ productsname.title}} </span>
+          <input type="checkbox"> 
+        </div>
+        {%endif%}
+       {% endfor %}
+      </div>
+  <!--end bundle code -->  
+
+
+
+///////////////////////////////////// product bundle with variant///////////////////////
+      <div class="Bundle_Product_blocks">  
+        {% for block in section.blocks %}  
+        {% if block.settings.product_idsss != blank %}
+        {%- assign productsname = all_products[block.settings.product_idsss]-%}
+        {%- assign products_handle = all_products[block.settings.product_idsss].handle -%}
+        {%- assign getvar = all_products[products_handle].selected_or_first_available_variant -%} 
+        <div class="Bundle_product" product_id="{{productsname.id}}"> 
+          <div class="product_bundle">
+            <h2> {{ productsname.title}}</h2> 
+            <select name="id" id="ProductSelect-{{ section.id }}" class="product-form-bundle">
+                 {% for variant in productsname.variants %}
+                <option value="{{productbundle1.id}}">
+                  {{variant.title}}
+                </option>  
+                {%endfor%}
+            </select>
+          </div>
+          
+        </div>
+        {% endif %}
+       {% endfor %}
+      </div>
+////////////////////////////schema/////////////////
+,
+   "blocks": [
+   {
+    "type": "product",
+    "name": "Bundle Product",
+    "settings": [
+      {
+        "type": "product",
+        "id": "product_idsss",
+        "label": "Select Bundle Product"
+      }
+    ]
+  }
+ ]  
