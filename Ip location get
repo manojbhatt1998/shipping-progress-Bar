@@ -1,0 +1,7 @@
+IP LOCATION GET
+
+jQuery.get("http://ipinfo.io", function(response) {
+  var getcountry = response.country ;
+
+   console.log(getcountry);
+}, "jsonp");
