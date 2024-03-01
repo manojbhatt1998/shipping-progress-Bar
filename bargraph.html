@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.0/css/foundation.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        .body {
+            background: #f0eeef;
+            font-family: 'Open Sans', sans-serif;
+            padding: 5% 0%;
+        }
+
+        .c-cantner {
+            max-width: 1024px;
+            margin: 100px auto 0;
+        }
+
+        h2 {
+            margin-bottom: 2rem;
+        }
+
+        button {
+            background-color: #000;
+            border: 0;
+            border-radius: 0;
+            padding: 1rem 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        .custom-bar-horizontal h3 {
+          font-weight: 600;
+        }
+
+        button:hover {
+            border-radius: 6px;
+            background-color: #f50045;
+            transition: all 500ms ease;
+        }
+
+        .ce_ixelgen_progress_bar {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .ce_ixelgen_progress_bar .progress_bar_item {
+            margin-bottom: 2rem;
+        }
+
+        .ce_ixelgen_progress_bar .item_label,
+        .ce_ixelgen_progress_bar .item_value {
+            display: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .ce_ixelgen_progress_bar .item_value {
+            font-weight: 400;
+        }
+
+        .ce_ixelgen_progress_bar .item_bar {
+            position: relative;
+            height: 2rem;
+            width: 100%;
+            background-color: #d9d9d9;
+            /* border-radius: 4px; */
+        }
+
+        .ce_ixelgen_progress_bar .item_bar .progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            height: 2rem;
+            margin: 0;
+            background-color: #b82d16;
+            border-radius: 0px 20px 20px 0px;
+            transition: width 100ms ease;
+        }
+
+        /* left bars */
+        .ce_ixelgen_progress_bar .left-side-bars .item_bar {
+            position: relative;
+            height: 2rem;
+            width: 100%;
+            background-color: #d9d9d9;
+            direction: rtl;
+        }
+
+        .progress_bar.left-side-bars .progress {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            height: 2rem;
+            margin: 0;
+            background-color: #b82d16;
+            border-radius: 20px 0 0 20px;
+            transition: width 100ms ease;
+        }
+
+        span.left_number {
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            padding-left: 5px;
+            color: #fff;
+        }
+
+        span.right_number {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            padding-left: 5px;
+            color: #fff;
+        }
+
+        .c-main_row {
+            display: flex;
+            /* gap: 20px; */
+        }
+
+        .c-leftside_col {
+            width: 40%;
+        }
+
+        .c-center_col {
+            width: 20%;
+        }
+
+        .c-right_col {
+            width: 40%;
+        }
+
+        .c-leftside_col h3 {
+            text-align: end;
+        }
+
+        .c-leftside_col p {
+            text-align: end;
+        }
+
+        .c-center_col {
+            text-align: center;
+            background-color: white;
+            box-shadow: 0px 0px 147px #00000030;
+        }
+
+        .c-center_col h3 {
+            padding-top: 9%;
+            font-size: 5rem;
+            font-weight: 700;
+            color: #a3bc69;
+        }
+
+        .c-center_col h3 span {
+            color: #f50045;
+
+        }
+
+        .c-center_col ul {
+            margin-left: 0px;
+            list-style: none;
+            padding: 0px;
+            margin-top: 8%;
+        }
+
+        .c-center_col ul li {
+            padding: 13% 0px;
+            font-weight: 600;
+        }
+
+        .c-leftside-text {
+            padding: 2% 5%;
+        }
+
+        .custom-bar-horizontal hr {
+            display: none;
+        }
+        .progress.semaplus span {
+    color: #000;
+} 
+        .progress.semaplus {
+    background:#a3b869 !important;
+} 
+
+        @media only screen and (max-width: 768px) {
+            .c-main_row {
+                justify-content: center;
+                display: flex;
+                align-items: center;
+                /* gap: 20px; */
+            }
+            .c-center_col {
+                display: none;
+            }
+            .progress.big-in-mobile {
+    width: 35% !important;
+}
+        }
+    </style>
+</head>
+
+<body>
+    <section class="body">
+        <div class="c-cantner custom-bar-horizontal">
+            <div class="c-main_row">
+                <div class="c-leftside_col">
+                    <div class="ce_ixelgen_progress_bar block">
+                        <div class="c-leftside-text">
+                            <h3>Lorem Ipsum</h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                        </div>
+                        <hr>
+                        <div class="progress_bar left-side-bars">
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Performance</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress semaplus" data-progress="40"><span class="left_number">40%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Speed</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress" data-progress="60"><span class="left_number">60%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Acceleration</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress semaplus" data-progress="70"><span class="left_number">70%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Handling</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress big-in-mobile" data-progress="20"><span class="left_number">20%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Handling</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress semaplus" data-progress="50"><span class="left_number">50%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="c-center_col">
+                    <div class="ce_ixelgen_progress_bar block">
+
+                        <h3>V<span>S</span></h3>
+                        <ul>
+                            <li>Lorem Ipsum </li>
+                            <li>Lorem Ipsum </li>
+                            <li>Lorem Ipsum </li>
+                            <li>Lorem Ipsum </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="c-right_col">
+                    <div class="ce_ixelgen_progress_bar block">
+
+                        <div class="c-leftside-text">
+                            <h3>Lorem Ipsum</h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+                        </div>
+                        <hr>
+                        <div class="progress_bar right-side-bars">
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Performance</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress" data-progress="70"><span class="right_number">70%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Speed</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress semaplus" data-progress="40"><span class="right_number">40%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Acceleration</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress" data-progress="30"><span class="right_number">30%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Handling</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress semaplus" data-progress="70"><span class="right_number">70%</span></div>
+                                </div>
+                            </div>
+                            <div class="progress_bar_item grid-x">
+                                <div class="item_label cell auto">Handling</div>
+                                <div class="item_value cell shrink">0%</div>
+                                <div class="item_bar cell">
+                                    <div class="progress" data-progress="50"><span class="right_number">50%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+
+        $(document).ready(function () {
+            progress_bar();
+        });
+
+        function progress_bar() {
+            var speed = 30;
+            var items = $('.progress_bar').find('.progress_bar_item');
+
+            items.each(function () {
+                var item = $(this).find('.progress');
+                var itemValue = item.data('progress');
+                var i = 0;
+                var value = $(this);
+
+                var count = setInterval(function () {
+                    if (i <= itemValue) {
+                        var iStr = i.toString();
+                        item.css({
+                            'width': iStr + '%'
+                        });
+                        value.find('.item_value').html(iStr + '%');
+                    }
+                    else {
+                        clearInterval(count);
+                    }
+                    i++;
+                }, speed);
+            });
+        }
+    </script>
+</body>
+
+</html>
