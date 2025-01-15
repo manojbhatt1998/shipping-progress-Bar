@@ -1,0 +1,182 @@
+screenshot - https://prnt.sc/vtNMYJ4xPnhj
+<style>
+.c-problem-statement {
+    max-width: 100vw;
+    position: relative;
+}
+.c-section-wrap.cc-min-height-300vh {
+    min-height: 300vh;
+}
+.c-problem-statement__container {
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1280px;
+    height: 50vh;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 128px;
+    padding-bottom: 128px;
+    display: flex;
+    position: sticky;
+    top: 25%;
+    bottom: 25%;
+}
+.c-problem-statement__highlighted-word {
+    font-size: 70px;
+    line-height: 80px;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(#ffffff40,#ffffff26);
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: all .2s cubic-bezier(.77,0,.175,1);
+    display: inline-block;
+}
+.heading-md.cc-problem-statement {
+    max-width: 1120px;
+    line-height: 135%;
+}
+.heading-md.cc-center {
+    text-align: center;
+}
+.heading-md {
+    text-transform: none;
+    text-wrap: balance;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 3.5rem;
+    font-weight: 600;
+    line-height: 120%;
+}
+
+@media(max-width:500px){
+   .c-problem-statement__highlighted-word {
+      font-size: 28px;
+      line-height: 52px;
+  }
+}
+</style>
+
+<section id="statement" class="c-problem-statement">
+  <div class="c-section-wrap cc-min-height-300vh">
+    <div class="c-problem-statement__container">
+      <h3 class="heading-md cc-problem-statement cc-center cc-fade-up visible">
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">5 to 6 hours.</span>
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">That’s</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">the</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">average</span>
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">time</span>
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">you’ll</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">spend</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">on</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">your</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">phone</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">today</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">—</span>
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">often</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">without</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">realizing.</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.6) 100%);">It’s</span>
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);">time</span>
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);">to</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);">fight</span> 
+        <span class="c-problem-statement__highlighted-word" style="background-image: linear-gradient(rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);">back.</span></h3>
+        </div><div class="c-html-embed w-embed w-script">
+ <script>
+	document.addEventListener("DOMContentLoaded", function() {
+    	window.addEventListener('scroll', function() {
+          var windowHeight = window.innerHeight;
+          var section = document.querySelector('.c-problem-statement');
+          var sectionOffset = section.getBoundingClientRect().top + (windowHeight / 2);
+          var sectionHeight = section.offsetHeight + windowHeight;
+          var words = document.querySelectorAll('.c-problem-statement span');
+
+          // Calculate the scroll progress relative to the section
+          var scrollProgress = Math.max(0, Math.min(1, (window.scrollY - sectionOffset) / sectionHeight));
+
+          // Calculate the index of the word to light up based on scroll progress
+          var wordIndex = Math.floor(scrollProgress * words.length);
+
+          // Light up words from the first one up to the current word index
+          for (var i = 0; i <= wordIndex; i++) {
+            var gradientColor = 'linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.6) 100%)';
+            words[i].style.backgroundImage = gradientColor;
+          }
+
+          // Reset background of words after the current word index
+          for (var j = wordIndex + 1; j < words.length; j++) {
+            words[j].style.backgroundImage = 'linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%)';
+          }
+      });
+  });
+</script>
+  </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Problem Statement",
+    "class":"problem-statement",
+    "settings": [
+     
+     ],
+   "blocks": [
+    {
+      "type": "heading",
+      "name": "heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "5 to 6 hours.",
+          "label": "Scroll Text"
+        }
+      ]
+    }
+    ],
+    "presets": [
+     {
+       "name": "Problem Statement",
+        "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+       },
+       {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "heading"
+        }
+      ]
+     }
+   ]
+  }
+{% endschema %}
