@@ -1,0 +1,629 @@
+screenshot -  https://prnt.sc/6Ba8FtuOkyD4
+
+ <!--Jquery cdn-->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <!--Fontawesome-->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <!--slick slider  -->
+ <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" defer="defer"></script>
+
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> -->
+
+
+ <style>
+.slider_right {
+  direction: rtl !important; 
+}
+ .slider_left .slick-slide  ,.slider_right .slick-slide  {
+  margin: 0 20px;
+}
+
+.slider_left ,.slider_right {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+/* .slider_left .slick-slide img {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}  */
+
+.c-marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.c-testimonial-card {
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.c-testimonial-card:hover {
+  transform: scale(1.05);
+}
+
+.cc-fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cc-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.c-testimonials {
+    flex-flow: column;
+    align-items: center;
+    width: 100vw;
+    max-width: 100vw;
+    display: flex;
+    overflow-x: clip;
+}
+.c-header__wrap {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 128px;
+    padding-bottom: 72px;
+}
+.c-header {
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    position: relative;
+}
+.c-header__gradient {
+    z-index: -1;
+    pointer-events: none;
+    justify-content: center;
+    align-items: center;
+    width: 175%;
+    height: 175%;
+    display: none;
+    position: absolute;
+}
+.c-header__content {
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+    position: relative;
+}
+.c-header-heading-caption-container {
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    flex-flow: column;
+    align-items: center;
+    display: flex;
+}
+.c-header__caption {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    outline-offset: 0px;
+    background-color: #ffffff0a;
+    border-radius: 18px;
+    outline: 1.5px solid #ffffff1f;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+}
+.c-header-heading-caption-container {
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    flex-flow: column;
+    align-items: center;
+    display: flex;
+}
+.subheading.cc-center.cc-fade-up.cc-testimonials {
+    max-width: 400px;
+}
+.subheading {
+    color: #ada8bc80;
+    text-wrap: balance;
+    margin-bottom: 0;
+    font-size: 2.1rem;
+    font-weight: 500;
+    line-height: 160%;
+}
+.subheading.cc-center {
+    text-align: center;
+}
+.c-testimonials__container {
+    grid-column-gap: 48px;
+    grid-row-gap: 48px;
+    flex-flow: column;
+    width: 100%;
+    display: flex;
+}
+.c-marquee__wrap {
+    flex-flow: row;
+    justify-content: flex-start;
+    display: flex;
+}
+.c-marquee__wrap.cc-reversed {
+    justify-content: flex-end;
+}
+.c-marquee__wrap {
+    flex-flow: row;
+    justify-content: flex-start;
+    display: flex;
+}
+.c-testimonials__list-wrapper.cc-reversed {
+    margin-left: 48px;
+    margin-right: 0;
+}
+.c-testimonials__list {
+    grid-column-gap: 48px;
+    grid-row-gap: 48px;
+    justify-content: center;
+    width: 100%;
+    display: flex;
+}
+.c-testimonials__list-item {
+    flex: none;
+    width: 280px;
+}
+.c-testimonial-card {
+    aspect-ratio: 1/1.25;
+    background-color: #ffffff03;
+    border-radius: 32px;
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    width: 100%;
+    padding: 32px;
+    text-decoration: none;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+/* .c-testimonial-card__img.cc-no-select {
+    width: 105%;
+    height: 105%;
+    top: -3%;
+    left: -3%;
+} */
+.c-testimonial-card__img {
+    object-fit: cover;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    position: absolute;
+    inset: 0%;
+}
+.c-card__blur {
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+}
+.c-card__blur.cc-no-select.no-blur {
+    opacity: 1;
+    filter: blur(40px);
+}
+.c-card__blur.cc-no-select {
+    z-index: 1;
+}
+.c-card__blur__img.cc-no-select.minimal-blur {
+    -webkit-mask: radial-gradient(100% 28% at 50% 85%,#fff 50%,#0000);
+    mask: radial-gradient(100% 28% at 50% 85%,#fff 50%,#0000);
+}
+.c-card__blur__img {
+    aspect-ratio: 2/3;
+    object-position: 50% 100%;
+    object-fit: cover;
+    filter: saturate(1.8)brightness(.75);
+    width: 160%;
+    max-width: none;
+    height: 175%;
+    position: relative;
+    top: -20%;
+    left: 50%;
+    translate: -50%;
+    -webkit-mask: radial-gradient(100% 48% at 50% 85%,#fff 50%,#0000);
+    mask: radial-gradient(100% 48% at 50% 85%,#fff 50%,#0000);
+}
+.c-testimonial-card__container {
+    z-index: 2;
+    grid-column-gap: 6px;
+    grid-row-gap: 6px;
+    flex-flow: column;
+    align-items: flex-start;
+    display: flex;
+    position: relative;
+}
+.c-testimonial-card__header {
+    grid-column-gap: 12px;
+    grid-row-gap: 12px;
+    justify-content: space-between;
+    align-self: stretch;
+    align-items: center;
+    display: flex;
+}
+.label-lg.cc-gradient {
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(#fff,#ffffffb3);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+.c-testimonial-card {
+    aspect-ratio: 1/1.25;
+    background-color: #ffffff03;
+    border-radius: 32px;
+    flex-flow: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    width: 100%;
+    padding: 32px;
+    text-decoration: none;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+.c-testimonial-card__badge {
+    grid-column-gap: 8px;
+    grid-row-gap: 8px;
+    background-color: #ffffff1f;
+    border-radius: 50px;
+    align-items: center;
+    padding: 7px 12px;
+    display: flex;
+}
+.c-testimonial-card__badge-emoji {
+    font-size: 1.125rem;
+    line-height: 100%;
+}
+.heading-md {
+    text-transform: none;
+    text-wrap: balance;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 5.5rem;
+    font-weight: 600;
+    line-height: 120%;
+}
+.heading-md.cc-center.cc-testimonials {
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(#fff3,#fff3),linear-gradient(90deg,#c38df9 20%,#f5b8af 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    max-width: 440px;
+}
+.paragraph-new.cc-testimonial-card.cc-no-select {
+    overflow: visible;
+}
+.paragraph-new.cc-testimonial-card {
+    color: #fffc;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+    line-height: 100%;
+    display: -webkit-box;
+    overflow: hidden;
+}
+.paragraph-new.cc-testimonials {
+    color: #ffffff80;
+    font-size: 1.125rem;
+}
+[wfu-truncate="2"] {
+    -webkit-line-clamp: 2;
+}
+@media(min-width:992px){
+  .cc-hover-scale {
+      transition: transform 0.3s ease;
+  }
+}
+</style>
+
+<section id="testimonials" class="c-testimonials">
+    <!-- Header Section -->
+    <div class="c-header__wrap">
+        <div class="c-header">
+            <div class="c-header__gradient">
+                <img src="{{ 'pink-glow.webp' | asset_url }}" loading="lazy" sizes="100vw">
+            </div>
+            <div class="c-header__content">
+                <div class="c-header-heading-caption-container">
+                    <div class="c-header__caption cc-fade-up visible">
+                        <div class="c-header__caption__label cc-testimonials">{{ section.settings.heading }}</div>
+                    </div>
+                    <h3 class="heading-md cc-center cc-testimonials cc-fade-up visible">{{ section.settings.html_1 }}</h3>
+                </div>
+                <p class="subheading cc-center cc-fade-up cc-testimonials visible">{{ section.settings.html_2 }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Sliders -->
+    <div class="c-testimonials__container">
+        <!-- Left Slider -->
+        <div class="c-marquee__wrap cc-fade-up cc-hidden-mobile visible">
+            <div class="c-marquee cc-60s">
+                <div class="c-testimonials__list-wrapper w-dyn-list">
+                    <div role="list" class="c-testimonials__list w-dyn-items slider_left">
+                        {% for block in section.blocks %}
+                        {% if block.type == 'LeftSlide' %}
+                        <div role="listitem" class="c-testimonials__list-item w-dyn-item">
+                            <a href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}" class="c-testimonial-card cc-hover-scale w-inline-block">
+                                {% if block.settings.image != blank %}
+                                    <img src="{{ block.settings.image | img_url: 'master' }}" loading="lazy" class="c-testimonial-card__img cc-no-select">
+                                {% else %}
+                                    {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                                {% endif %}
+                                <div class="c-card__blur cc-no-select no-blur">
+                                    {% if block.settings.image != blank %}
+                                        <img src="{{ block.settings.image | img_url: 'master' }}" loading="lazy" class="c-card__blur__img cc-no-select minimal-blur">
+                                    {% else %}
+                                        {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                                    {% endif %}
+                                </div>
+                                <div class="c-testimonial-card__container">
+                                    <div class="c-testimonial-card__header">
+                                        <div wfu-truncate="1" class="label-lg cc-gradient cc-no-select">Vivian Phung</div>
+                                    </div>
+                                    <div class="c-testimonial-card__badge">
+                                        <div class="c-testimonial-card__badge-emoji cc-no-select">🇺🇸</div>
+                                        <p wfu-truncate="" class="paragraph-new cc-testimonial-card cc-no-select">New York, USA</p>
+                                    </div>
+                                    <p wfu-truncate="2" class="paragraph-new cc-testimonials cc-no-select">iOS Engineer at Instagram</p>
+                                </div>
+                            </a>
+                        </div>
+                           {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Slider -->
+        <div class="c-marquee__wrap cc-fade-up cc-hidden-mobile visible">
+            <div class="c-marquee cc-60s">
+                <div class="c-testimonials__list-wrapper w-dyn-list">
+                    <div role="list" class="c-testimonials__list w-dyn-items slider_right">
+                        {% for block in section.blocks %}
+                         {% if block.type == 'RightSlide' %}
+                        <div role="listitem" class="c-testimonials__list-item w-dyn-item">
+                            <a href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}" class="c-testimonial-card cc-hover-scale w-inline-block">
+                                {% if block.settings.image != blank %}
+                                    <img src="{{ block.settings.image | img_url: 'master' }}" loading="lazy" class="c-testimonial-card__img cc-no-select">
+                                {% else %}
+                                    {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                                {% endif %}
+                                <div class="c-card__blur cc-no-select no-blur">
+                                    {% if block.settings.image != blank %}
+                                        <img src="{{ block.settings.image | img_url: 'master' }}" loading="lazy" class="c-card__blur__img cc-no-select minimal-blur">
+                                    {% else %}
+                                        {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                                    {% endif %}
+                                </div>
+                                <div class="c-testimonial-card__container">
+                                    <div class="c-testimonial-card__header">
+                                        <div wfu-truncate="1" class="label-lg cc-gradient cc-no-select">Vivian Phung</div>
+                                    </div>
+                                    <div class="c-testimonial-card__badge">
+                                        <div class="c-testimonial-card__badge-emoji cc-no-select">🇺🇸</div>
+                                        <p wfu-truncate="" class="paragraph-new cc-testimonial-card cc-no-select">New York, USA</p>
+                                    </div>
+                                    <p wfu-truncate="2" class="paragraph-new cc-testimonials cc-no-select">iOS Engineer at Instagram</p>
+                                </div>
+                            </a>
+                        </div>
+                          {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="c-testimonials__btn-wrap">
+        <a href="/quiz" class="c-cta-btn cc-testimonials with-icon w-inline-block">
+            <div class="c-cta-btn__label">Join a growing movement</div>
+        </a>
+    </div>
+</section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  $('.slider_left').slick({
+  arrows:false,
+  dots: false,
+  infinite: true,
+  speed: 8000,             
+  autoplay: true,
+  autoplaySpeed: 0,        
+  cssEase: 'linear',     
+  slidesToShow: 3,
+  slidesToScroll: 1,     
+  pauseOnHover: false,      
+  pauseOnFocus: false,   
+  variableWidth: false,      
+  centerMode: false,      
+  prevArrow: '<div class="prev"><img src="https://cdn.shopify.com/s/files/1/0687/4116/9407/files/left_sider-2.png?v=1721630671"></div>',
+  nextArrow: '<div class="next"><img src="https://cdn.shopify.com/s/files/1/0687/4116/9407/files/right-side-1.png?v=1721630671"></div>',
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      }
+    }
+  ]
+});
+
+$('.slider_right').slick({
+ arrows:false,
+  dots: false,
+  infinite: true,
+  rtl: true,                
+  speed: 8000,             
+  autoplay: true,
+  autoplaySpeed: 0,           
+  cssEase: 'linear',          
+  slidesToShow: 3,          
+  slidesToScroll: 1, 
+  pauseOnHover: false,
+  pauseOnFocus: false,
+  variableWidth: false,  
+  centerMode: false,        
+  prevArrow: '<div class="prev"><img src="https://cdn.shopify.com/s/files/1/0687/4116/9407/files/left_sider-2.png?v=1721630671"></div>',
+  nextArrow: '<div class="next"><img src="https://cdn.shopify.com/s/files/1/0687/4116/9407/files/right-side-1.png?v=1721630671"></div>',
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      }
+    }
+  ]
+});
+
+ });
+</script>
+{% schema %}
+  {
+    "name": "Testimonials",
+    "class":"testimonials",
+    "settings": [
+      {
+          "type": "text",
+          "id": "heading",
+          "default": "Community",
+          "label": "Small Heading"
+        },
+        {
+          "type": "html",
+          "id": "html_1",
+          "default": "This app has <br>changed my life",
+          "label": "Heading"
+        },
+        {
+          "type": "html",
+          "id": "html_2",
+          "default": "Hear how Opal transforms lives, directly from those who've made the journey",
+          "label": "Sub heading"
+        }
+      ],
+   "blocks": [
+    {
+      "type": "LeftSlide",
+      "name": "LeftSlide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "RightSlide",
+      "name": "RightSlide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+    ],
+    "presets":[
+      {
+       "name":"Testimonials",
+        "blocks": [
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+       },
+       {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        },
+        {
+          "type": "LeftSlide"
+        }
+      ]
+     } 
+    ]
+  }
+{% endschema %}
+
