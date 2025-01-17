@@ -1,0 +1,71 @@
+store - https://thehangmaster.com.au/
+
+//html//
+<p class="pricing">$145</p>
+
+<script>
+//this script require jquery
+
+el = $("#pricing_section");
+flagIn = false;
+flagOut = true;
+
+$(document).scroll(function () {  
+  if (window.pageYOffset - el.outerHeight() < el.offset().top && window.pageYOffset + $(window).outerHeight() > el.offset().top ){
+		//appear on screen	
+    flagIn=true;
+    //call your function only on appear
+		if(flagIn==true && flagOut==true){
+			flagOut=false;
+             console.log("yesssss");
+          $('.pricing').each(function() {
+              var $this = $(this);
+              
+              // Extract the number from the text
+              var priceText = $this.text().replace(/[^0-9]/g, '');
+              var price = parseInt(priceText);
+      
+              // Animate from 0 to the extracted price
+              $({ Counter: 0 }).animate({ Counter: price }, {
+                  duration: 3000,
+                  easing: 'swing',
+                  step: function(now) {
+                      $this.text('$' + Math.floor(now));
+                  }
+              });
+          });
+		}
+	}
+	else{
+    //not on screen
+		flagOut=true;
+    //call your function only on disappear
+		if(flagIn==true && flagOut==true){
+			flagIn=false;
+             console.log("nooooooo");
+		}
+	}
+});
+
+
+  
+//$(document).ready(function() {
+
+    // $('.pricing').each(function() {
+    //     var $this = $(this);
+        
+    //     // Extract the number from the text
+    //     var priceText = $this.text().replace(/[^0-9]/g, '');
+    //     var price = parseInt(priceText);
+
+    //     // Animate from 0 to the extracted price
+    //     $({ Counter: 0 }).animate({ Counter: price }, {
+    //         duration: 2000,
+    //         easing: 'swing',
+    //         step: function(now) {
+    //             $this.text('$' + Math.floor(now));
+    //         }
+    //     });
+    // });
+//});
+</script>
