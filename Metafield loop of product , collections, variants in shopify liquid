@@ -1,0 +1,18 @@
+{% assign products = product.metafields.custom.list_of_products.value %}
+ {% for proo in products %}
+ multiple product metfield list loop--{{ proo.title }} <br>
+{% endfor %}
+
+<br> <br>
+
+{% assign product_variants = product.metafields.custom.product_variants.value %}
+ {% for list_variant in product_variants %}
+ list_variant loop--{{ list_variant.title }} <br>
+{% endfor %}
+
+<br> <br>
+
+{% assign collections = product.metafields.custom.list_of_collections.value %}
+ {% for collection in collections %}
+ collection list loop--{{ collection.title }} <br>
+{% endfor %}
