@@ -1,0 +1,6 @@
+
+{% for faq_title in shop.metaobjects.faq_title.values %}
+
+ <h1>{{ faq_title.faq_title }}</h1>
+  <img src="{{ faq_title.image|img_url:'100x' }}">
+{% endfor %}
