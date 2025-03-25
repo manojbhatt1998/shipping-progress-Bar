@@ -1,0 +1,230 @@
+//***************************************create section wishlist.liquid**************************************
+{% style %}
+    .wishlist .hidden_wishlist_pro-img {
+      display: block !important;
+  }
+ modal-opener.product-popup-modal__opener.no-js-hidden.quick-add-hidden {
+    display: none;
+}
+{% endstyle %}
+{% comment %}
+  Shopify Wishlist
+  Usage:
+    - Create a new page in the Shopify admin
+      - Admin > Online store > Pages > Add page
+    - Set the new page's template to: 'page.wishlist'
+    - Do NOT remove the `grid-wishlist` attribute
+
+  Notes:
+  - The grid will be populated with product cards using Javascript
+  - Any content inside of the `[grid-wishlist]` element will be completely replaced by the product cards
+
+  Tip:
+  - Place a loading element inside the `[grid-wishlist]` element and it will automatically be removed once the product cards have loaded
+  - Add any liquid code before/after the grid element
+{% endcomment %}
+<div class="wishlist__grid flex container page-width" grid-wishlist>
+  {% comment %} Sample loading element {% endcomment %}
+  <p class="wishlist__loader full-width text-center">Loading...</p>
+</div>
+{% schema %}
+{
+  "name": "Wishlist",
+  "settings": []
+}
+{% endschema %}
+
+//**************************************button-wishlist.liquid snippet******************************************
+{% comment %}
+  Shopify Wishlist
+  Usage:
+    - Markup: {%- render 'button-wishlist', product: product -%}
+    - Place this snippet inside your existing product card snippet
+
+  Parameters:
+    - product: <Shopify product> (required)
+{% endcomment %}
+
+<button
+  type="button"
+  aria-label="Add to wishlist"
+  class=""
+  button-wishlist
+  data-product-handle="{{ card_product.handle }}"
+>
+  <style scoped>
+button{
+  border: 0;
+  cursor: pointer;
+  padding:0;
+}
+svg.wishlist-icon{
+  fill:transparent;
+}
+.active .wishlist-icon{
+    fill:red;
+    animation: beat cubic-bezier(0.04, 0.4, 0.5, 0.95) 450ms forwards 1;
+  }
+ .active .wishlist-icon path {
+  stroke: none;
+}
+
+@keyframes beat {
+  
+    30% {
+      opacity:1;
+      transform: scale(1.4);
+    }
+    50% {
+      transform: scale(0.8);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  </style>
+   <svg class="wishlist-icon" width="24" height="24" viewBox="0 0 18 16">
+      <path d="M9.01163699,14.9053769 C8.72930024,14.7740736 8.41492611,14.6176996 8.07646224,14.4366167 C7.06926649,13.897753 6.06198912,13.2561336 5.12636931,12.5170512 C2.52930452,10.4655288 1.00308384,8.09476443 1.00000218,5.44184117 C0.997549066,2.99198843 2.92175104,1.01242822 5.28303025,1.01000225 C6.41066623,1.00972036 7.49184369,1.4629765 8.28270844,2.2678673 L8.99827421,2.9961237 L9.71152148,2.26559643 C10.4995294,1.45849728 11.5791258,1.0023831 12.7071151,1.00000055 L12.7060299,1.00000225 C15.0693815,0.997574983 16.9967334,2.97018759 17.0000037,5.421337 C17.0038592,8.07662382 15.4809572,10.4530151 12.8850542,12.5121483 C11.9520963,13.2521931 10.9477036,13.8951276 9.94340074,14.4354976 C9.60619585,14.6169323 9.29297309,14.7736855 9.01163699,14.9053769 Z" stroke="#2D2D2D" stroke-width="1"></path>
+    </svg>
+</button>
+
+//**********************************************asset file wishlist.js*******************************************************************
+const LOCAL_STORAGE_WISHLIST_KEY = 'shopify-wishlist';
+const LOCAL_STORAGE_DELIMITER = ',';
+const BUTTON_ACTIVE_CLASS = 'active';
+const GRID_LOADED_CLASS = 'loaded';
+
+const selectors = {
+  button: '[button-wishlist]',
+  grid: '[grid-wishlist]',
+  productCard: '.product__info-container',
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  initButtons();
+  initGrid();
+ 
+});
+
+document.addEventListener('shopify-wishlist:updated', (event) => {
+  console.log('[Shopify Wishlist] Wishlist Updated ✅', event.detail.wishlist);
+  initGrid();
+    const wishlistcount= event.detail.wishlist.length;
+  $('.wishlist_count').text(wishlistcount);
+});
+
+document.addEventListener('shopify-wishlist:init-product-grid', (event) => {
+  console.log('[Shopify Wishlist] Wishlist Product List Loaded ✅', event.detail.wishlist); 
+   const wishlistcount= event.detail.wishlist.length;
+  $('.wishlist_count').text(wishlistcount);
+});
+
+document.addEventListener('shopify-wishlist:init-buttons', (event) => {
+  console.log('[Shopify Wishlist] Wishlist Buttons Loaded ✅', event.detail.wishlist); 
+   const wishlistcount= event.detail.wishlist.length;
+  $('.wishlist_count').text(wishlistcount);
+});
+
+const fetchProductCardHTML = (handle) => {
+  const productTileTemplateUrl = `/products/${handle}`;
+  return fetch(productTileTemplateUrl)
+  .then((res) => res.text())
+  .then((res) => {
+    const text = res;
+    const parser = new DOMParser();
+    const htmlDocument = parser.parseFromString(text, 'text/html');
+    const productCard = htmlDocument.documentElement.querySelector(selectors.productCard);
+    return productCard.outerHTML;
+  })
+  .catch((err) => console.error(`[Shopify Wishlist] Failed to load content for handle: ${handle}`, err));
+   
+};
+
+const setupGrid = async (grid) => {
+  const wishlist = getWishlist();
+  const requests = wishlist.map(fetchProductCardHTML);
+  const responses = await Promise.all(requests);
+  const wishlistProductCards = responses.join('');
+  grid.innerHTML = wishlistProductCards;
+  grid.classList.add(GRID_LOADED_CLASS);
+  initButtons();
+
+  const event = new CustomEvent('shopify-wishlist:init-product-grid', {
+    detail: { wishlist: wishlist }
+  });
+  document.dispatchEvent(event);
+};
+
+const setupButtons = (buttons) => {
+  buttons.forEach((button) => {
+    const productHandle = button.dataset.productHandle || false;
+    if (!productHandle) return console.error('[Shopify Wishlist] Missing `data-product-handle` attribute. Failed to update the wishlist.');
+    if (wishlistContains(productHandle)) button.classList.add(BUTTON_ACTIVE_CLASS);
+    button.addEventListener('click', () => {
+      updateWishlist(productHandle);
+      button.classList.toggle(BUTTON_ACTIVE_CLASS);
+    });
+  });
+};
+
+const initGrid = () => {
+  const grid = document.querySelector(selectors.grid) || false;
+  if (grid) setupGrid(grid);
+};
+
+const initButtons = () => {
+  const buttons = document.querySelectorAll(selectors.button) || [];
+  if (buttons.length) setupButtons(buttons);
+  else return;
+  const event = new CustomEvent('shopify-wishlist:init-buttons', {
+    detail: { wishlist: getWishlist() }
+  });
+  document.dispatchEvent(event);
+};
+
+const getWishlist = () => {
+  const wishlist = localStorage.getItem(LOCAL_STORAGE_WISHLIST_KEY) || false;
+  if (wishlist) return wishlist.split(LOCAL_STORAGE_DELIMITER);
+  return [];
+};
+
+const setWishlist = (array) => {
+  const wishlist = array.join(LOCAL_STORAGE_DELIMITER);
+  if (array.length) localStorage.setItem(LOCAL_STORAGE_WISHLIST_KEY, wishlist);
+  else localStorage.removeItem(LOCAL_STORAGE_WISHLIST_KEY);
+
+  const event = new CustomEvent('shopify-wishlist:updated', {
+    detail: { wishlist: array }
+  });
+  document.dispatchEvent(event);
+
+  return wishlist;
+};
+
+const updateWishlist = (handle) => {
+  const wishlist = getWishlist();
+  const indexInWishlist = wishlist.indexOf(handle);
+  if (indexInWishlist === -1) wishlist.push(handle);
+  else wishlist.splice(indexInWishlist, 1);
+  return setWishlist(wishlist);
+  var count = $('.wishlist__grid product-info').length; 
+
+  $(".wishlist_count").html(count); 
+};
+
+const wishlistContains = (handle) => {
+  const wishlist = getWishlist();
+  return wishlist.includes(handle);
+};
+
+const resetWishlist = () => {
+  return setWishlist([]);
+};
+
+//*******************************************************************************add in header.liquid anchor tag***************************************************************
+<a href="/pages/wishlist" class="header__icon header__icon--cart link focus-inset wishlist_header">
+<svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.0571 23.1052L13.0573 23.1052C13.1349 23.1342 13.2168 23.1488 13.2988 23.1488C13.381 23.1488 13.4627 23.1341 13.5403 23.1052L13.5405 23.1052C14.9258 22.5864 17.1319 21.2464 19.2779 19.4231C21.4244 17.5993 23.5241 15.2808 24.6848 12.798C26.9617 7.92767 25.1611 3.85321 22.3446 1.98245C19.5815 0.147065 16.0856 0.457147 13.2988 2.71668C10.512 0.4569 7.01605 0.147071 4.25275 1.98244C1.43623 3.85296 -0.364357 7.92768 1.9125 12.798C3.07322 15.2808 5.17296 17.5993 7.31956 19.4231C9.4656 21.2465 11.6718 22.5865 13.0571 23.1052ZM3.12463 12.2771L3.12463 12.2771C1.14771 8.04863 2.66023 4.58919 5.00928 3.02873C5.87851 2.45146 6.9935 2.05616 8.22524 2.05616C9.66458 2.05616 11.2716 2.59604 12.8398 4.03306L12.8399 4.03315C13.0968 4.26802 13.5005 4.26802 13.7574 4.03315L13.7575 4.03307C16.6596 1.37448 19.7049 1.77836 21.588 3.02898C23.9373 4.58919 25.4496 8.04887 23.4727 12.2773C22.4352 14.4965 20.5312 16.6207 18.555 18.3268C16.602 20.0128 14.5907 21.2802 13.2988 21.823C12.007 21.2801 9.99563 20.0128 8.04258 18.3268C6.06621 16.6206 4.16205 14.4964 3.12463 12.2771Z" fill="black" stroke="black" stroke-width="0.242231"></path>
+</svg>
+<span class="wishlist_count">3</span>
+</a>
