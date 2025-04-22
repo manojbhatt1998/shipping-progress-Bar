@@ -1,0 +1,25 @@
+
+
+metafield backend - https://prnt.sc/6wRvnyHiyea9
+
+call variant anywhere inside loop on pdp page
+{% assign variant = product.variants[forloop.index0] %}
+{% assign dynamic_key = 'color' | append: forloop.index0 %}
+
+ll--{{ variant.metafields.custom[dynamic_key].value }}
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Variant Image
+variant.metafields.var.image
+Color
+variant.metafields.color.value
+        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" 
+style="{% if product.variants[forloop.index0].metafields.color.value != blank %}
+background:{{product.variants[forloop.index0].metafields.color.value }};
+{% elsif product.variants[forloop.index0].metafields.var.image != blank %}background-image:url('{{product.variants[forloop.index0].metafields.var.image}}');
+{% else %}background:{{ value }};{% endif %}">
+                            {{ value }}
+                          </label>
