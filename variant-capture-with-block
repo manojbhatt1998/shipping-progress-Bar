@@ -1,0 +1,60 @@
+In this code product variant price is showed with block setting
+https://prnt.sc/qJNc84xMrCPK
+
+
+{%- assign variant_block = section.blocks | where: 'type', 'price-name' -%}
+{%- assign variant_name = "" -%}
+{%- assign variant_price = "" -%}
+{%- for block in variant_block -%}
+  {% capture variant_name %}{{ variant_name }}{{ block.settings.variant_name | strip }}||{% endcapture %}
+  {% capture variant_price %}{{ variant_price }}{{ block.settings.variant_price | strip }}||{% endcapture %}
+{%- endfor -%}
+{% assign variant_name_array = variant_name | split: '||' %}
+{% assign variant_price_array = variant_price | split: '||' %}
+<div class="cls-price_install">
+  {% assign match_found = false %}
+  {% for variant_name_item in variant_name_array %}
+    {% assign variant_name_item_clean = variant_name_item | strip %}
+    {% assign value_clean = value | strip %}
+    {% if variant_name_item_clean == value_clean %}
+      {% assign matched_price = variant_price_array[forloop.index0] %}
+      {% assign match_found = true %}
+      Matched Price: {{ matched_price }} | Variant Name: {{ variant_name_item_clean }} <br>
+    {% endif %}
+  {% endfor %}
+  {% unless match_found %}
+    No match found.
+  {% endunless %}
+</div>
+
+
+{
+      "type": "price-name",
+      "name": "Variant Prices Names",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "text",
+          "id": "variant_name",
+          "default": "echo 40sqm -- 1 bed 1 bath",
+          "label": "Variant name",
+          "info": "Add variant name same as backend of product Ex- echo 40sqm -- 1 bed 1 bath"
+        },
+        {
+          "type": "text",
+          "id": "variant_price",
+          "default": "-$120,000",
+          "label": "Price",
+          "info": "Add Price For variant"
+        }
+      ]
+    },
+
+
+
+
+
+
+
+
+
