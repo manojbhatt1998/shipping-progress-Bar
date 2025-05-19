@@ -1,0 +1,1582 @@
+<!--Section =>  bundle-collection-product-grid.liquid -->
+ <!-- use this file or add this html code and js to the collection-product-grid -->
+
+{{ 'bundle-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+
+{%- style -%}
+  .section-{{ section.id }}-padding .icon-bundle-bottle {
+    width: 44px;
+    height: 103px;
+    background-image: url("{{ section.settings.item_placeholder|img_url:'master'}}");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding">
+
+  <div class="bundle-collection page-width {% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
+    <div class="bundle-collection-content">
+
+        <hr class="separate desktop-only">
+
+        <div class="descriptionHolder desktop-only page-width">
+            <div class="collection-hero__description rte">
+            {{ collection.description }}
+            </div>
+            <div class="sortingHolder"></div>
+        </div>  
+
+        <div class="product-grid-container" id="ProductGridContainer">
+       {% comment %} {%- paginate collection.products by section.settings.products_per_page -%}
+            {%- if collection.products.size == 0 -%}
+            <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
+                <div class="loading-overlay gradient"></div>
+                <div class="title-wrapper center">
+                <h2 class="title title--primary">
+                    {{ 'sections.collection_template.empty' | t }}<br>
+                    {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "underlined-link link" }}
+                </h2>
+                </div>
+            </div>
+            {%- else -%}
+               {%- endif -%}
+        {%- endpaginate -%} {% endcomment %} 
+            <div class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}">
+                <div class="loading-overlay gradient"></div>
+        
+                <ul id="product-grid" data-id="{{ section.id }}" class="
+                grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
+                grid--{{ section.settings.columns_desktop }}-col-desktop">
+                  {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+                    {% assign collection = section.settings.collection %}
+                    {% assign lazy_load = true %}
+                    {%- if forloop.index > 2 -%}
+                    {%- assign lazy_load = true -%}
+                    {%- endif -%}
+                    <li class="grid__item">
+                        {% render 'bundle-card-product',
+                            card_product: product,
+                            media_aspect_ratio: section.settings.image_ratio,
+                            show_secondary_image: section.settings.show_secondary_image,
+                            show_vendor: section.settings.show_vendor,
+                            show_rating: section.settings.show_rating,
+                            lazy_load: lazy_load,
+                            section_id: section.id,
+                            bundle_component: true
+                        %}
+                    </li>
+                {%- endfor -%}
+                </ul>
+        
+              {% comment %}  {%- if paginate.pages > 1 -%}
+                {% render 'pagination', paginate: paginate, anchor: '' %}
+                {%- endif -%}
+               {% endcomment %}
+            </div>
+           
+        </div>
+    </div>
+    <div class="bundle-collection-summary" id="bundle-collection-summary">
+         {% if section.settings.pack_item_heading %} <h2>{{ section.settings.pack_item_heading }}</h2>{% endif %}
+        <div class="bundle-quantity-selector">
+           {% if section.settings.pack_item_subheading %} <h3>{{ section.settings.pack_item_subheading }}</h3>{% endif %}
+            <div class="bundle-quantities">
+                <div class="bundle-quantity-box" data-bundle-components="2" data-bundle-discount="10">
+                    <p class="bundle-quantity-discount">{{ section.settings.qty_discount_1 }}</p>
+                  {% if section.settings.pack_item_text_1 %}  <p class="bundle-quantity-label">{{ section.settings.pack_item_text_1 }}</p> {% endif %}
+                </div>
+                <div class="bundle-quantity-box" data-bundle-components="3" data-bundle-discount="15">
+                   <p class="bundle-quantity-discount">{{ section.settings.qty_discount_2 }}</p>
+                  {% if section.settings.pack_item_text_2 %}  <p class="bundle-quantity-label">{{ section.settings.pack_item_text_2  }}</p> {% endif %}
+                </div>
+                <div class="bundle-quantity-box selected" data-bundle-components="4" data-bundle-discount="20">
+                    <p class="bundle-quantity-discount">{{ section.settings.qty_discount_3 }}</p>
+                  {% if section.settings.pack_item_text_3 %}  <p class="bundle-quantity-label">{{ section.settings.pack_item_text_3  }}</p> {% endif %}
+                </div>
+            </div>
+           {% if section.settings.bundle_warning != blank %} <div class="bundle-limit">{{ section.settings.bundle_warning }}</div> {% endif %}
+        </div>
+        <div class="bundle-selection bundle-selection-normal" data-bundle-components="4">
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+        </div>
+        <div class="bundle-totals">
+            <div class="bundle-subtotal">Subtotal (0 items)</div>
+            <div class="bundle-subtotal-cost">$0</div>
+        </div>
+        <div class="bundle-atc desktop-only">
+            <a href="#" class="bundle-add-to-cart" disabled>Add to cart</a>
+        </div>
+        <div class="bundle-atc mobile-only">
+          <a href="#" class="bundle-pick-products">Pick Products</a>
+        </div>
+        {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+        {%- form 'product', collection.products[0], id: product_form_installment_id, class: 'installment caption-large bundle-shoppay' -%}
+          <input type="submit" name="submit" value="Submit" class="hidden">
+          <input type="hidden" name="id" value="{{ collection.products[0].selected_or_first_available_variant.id }}">
+          {{ form | payment_terms }}
+        {%- endform -%}
+        
+    </div>
+  </div>
+</div>
+
+<div class="bundle-footer-fixed mobile-only medium-hide large-up-hide">
+    <div class="bundle-totals">
+        <div class="bundle-subtotal">Subtotal (0 items)</div>
+        <div class="bundle-subtotal-cost">$0</div>
+    </div>
+    <div class="bundle-selection-atc">
+        <div class="bundle-selection bundle-selection-sticky" data-bundle-components="4">
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+            <div class="bundle-selection-box">
+                <span class="icon-bundle-bottle"></span>
+            </div>
+        </div>
+        <div class="bundle-atc">
+            {% render 'icon-bundle-go-up' %}
+            <a href="#" class="bundle-add-to-cart" disabled>Add to cart</a>
+        </div>
+    </div>
+</div>
+   
+
+<script>
+    window.bundleComponents = 4;
+    window.bundleComponentsSelected = [];
+    window.bundleCost = 0;
+
+    document.querySelectorAll('.bundle-quantities .bundle-quantity-box').forEach(quantity => {
+        quantity.addEventListener('click' , function(e) {
+            if(!this.classList.contains('selected')) {
+                document.querySelector('.bundle-quantities .bundle-quantity-box.selected').classList.remove('selected');
+                this.classList.add('selected');
+                var thisQuantity = this;
+                document.querySelectorAll('.bundle-selection').forEach(selection => {
+                  selection.dataset.bundleComponents = thisQuantity.dataset.bundleComponents;
+                });
+                document.querySelectorAll('.bundle-component-quantity-selector input').forEach(quantityInput => {
+                  quantityInput.max = 4;
+                });
+                window.bundleComponents = parseInt(this.dataset.bundleComponents);
+                bundleBuildSelection(window.bundleComponentsSelected, window.bundleComponents);
+            }
+        });
+    });
+
+    document.querySelectorAll('.bundle-component-select').forEach(component => {
+        component.addEventListener('click', function(e) {
+            e.preventDefault();
+            if(window.bundleComponentsSelected.length < 4) {
+                if(window.bundleComponents == window.bundleComponentsSelected.length) {
+                  window.bundleComponents++;
+                  document.querySelector('.bundle-quantity-box[data-bundle-components="'+window.bundleComponents+'"]').click();
+                }
+                window.bundleComponentsSelected.push(parseInt(this.dataset.variantId));
+                window.bundleCost += parseInt(this.dataset.variantPrice);
+                this.parentElement.classList.add('selected');
+                this.parentElement.querySelector('input').value = 1;                           
+            }
+            bundleBuildSelection(window.bundleComponentsSelected, window.bundleComponents);
+        });
+    });
+
+    document.querySelectorAll('.bundle-component-quantity-selector button').forEach(componentQuantityButton => {
+      componentQuantityButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var currentQuantityInput = this.parentElement.querySelector('input');
+        var component = this.closest('.bundle-component-actions');
+        var componentData = component.querySelector('.bundle-component-select');
+        if(this.classList.contains('bundle-minus')) {          
+          if(currentQuantityInput.value <= 1) {
+            currentQuantityInput.value = 0;
+            component.classList.remove('selected');
+          } else {
+            currentQuantityInput.value = parseInt(currentQuantityInput.value)-1;
+          }
+          var indexOfVariantInBundle = window.bundleComponentsSelected.lastIndexOf(parseInt(componentData.dataset.variantId));
+          window.bundleComponentsSelected.splice(indexOfVariantInBundle,1);
+          window.bundleCost -= parseInt(componentData.dataset.variantPrice);
+          bundleBuildSelection(window.bundleComponentsSelected, window.bundleComponents);
+        } else {
+          if(window.bundleComponentsSelected.length < 4) {
+            if(window.bundleComponents == window.bundleComponentsSelected.length) {
+              window.bundleComponents++;
+              document.querySelector('.bundle-quantity-box[data-bundle-components="'+window.bundleComponents+'"]').click();
+            }
+            console.log(currentQuantityInput);
+            currentQuantityInput.value = parseInt(currentQuantityInput.value)+1;
+            window.bundleComponentsSelected.push(componentData.dataset.variantId);
+            window.bundleCost += parseInt(componentData.dataset.variantPrice);            
+          }
+          bundleBuildSelection(window.bundleComponentsSelected, window.bundleComponents);
+        }
+      })
+    });
+
+    document.querySelectorAll('.bundle-component-remove').forEach(componentQuantityRemove => {
+      componentQuantityRemove.addEventListener('click', function(e) {
+        e.preventDefault();
+        var currentQuantityInput = this.parentElement.querySelector('input');
+        var component = this.closest('.bundle-component-actions');
+        var componentData = component.querySelector('.bundle-component-select');
+        if(currentQuantityInput.value > 0) {
+          while(window.bundleComponentsSelected.lastIndexOf(parseInt(componentData.dataset.variantId)) !== -1) {
+            var indexOfVariantInBundle = window.bundleComponentsSelected.lastIndexOf(parseInt(componentData.dataset.variantId));
+            window.bundleComponentsSelected.splice(indexOfVariantInBundle,1);
+          }
+          window.bundleCost -= parseInt(componentData.dataset.variantPrice) * currentQuantityInput.value;
+          bundleBuildSelection(window.bundleComponentsSelected, window.bundleComponents);
+        }
+        currentQuantityInput.value = 0;
+        component.classList.remove('selected');
+      })
+    });
+
+    //Disable writing component quantity value manually
+    document.querySelectorAll('.bundle-component-quantity-selector input').forEach(componentQuantityInput => {
+      componentQuantityInput.addEventListener('keypress', function(e) {
+        e.preventDefault();
+      })
+    });
+
+    /* If bundle is set */
+    var queryString = window.location.search;
+    var urlParams = new URLSearchParams(queryString);
+    var removeKeys = [];
+    var currentBundleComponents = 4;
+    if(urlParams.get('bundle-id')) {
+      var currentBundleId = urlParams.get('bundle-id');
+      fetch(window.Shopify.routes.root + 'cart.js', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        data.items.forEach(cartItem => {
+          if(cartItem.properties._bundle_id && cartItem.properties._bundle_id == currentBundleId) {
+            removeKeys.push(cartItem.key);
+            currentBundleComponents = cartItem.properties._bundle_components;
+            var bundleComponent = document.querySelector('.bundle-component-select[data-variant-id="'+cartItem.id+'"]');
+            var bundleComponentActions = bundleComponent.parentElement;
+            var bundleComponentValue = bundleComponentActions.querySelector('input');
+            if(!bundleComponentActions.classList.contains('selected')) {
+              bundleComponentActions.classList.add('selected');
+            }
+            bundleComponentValue.value = parseInt(bundleComponentValue.value) + 1;
+            window.bundleCost += parseInt(cartItem.price);
+            window.bundleComponentsSelected.push(cartItem.id);
+          }
+        });
+        window.bundleComponents = currentBundleComponents;
+        if(currentBundleComponents != 4) {
+          document.querySelector('.bundle-quantities .bundle-quantity-box.selected').classList.remove('selected');
+          document.querySelectorAll('.bundle-quantities .bundle-quantity-box').forEach(quantity => {
+            if(quantity.dataset.bundleComponents == currentBundleComponents) {
+              quantity.classList.add('selected')
+            }
+          });
+          document.querySelectorAll('.bundle-selection').forEach(selection => {
+            selection.dataset.bundleComponents = currentBundleComponents;
+          });
+          document.querySelectorAll('.bundle-component-quantity-selector input').forEach(quantityInput => {
+            quantityInput.max = 4;
+          });
+        }    
+            
+        bundleBuildSelection(window.bundleComponentsSelected, window.bundleComponents);
+        document.querySelector('.bundle-collection').classList.add('loaded');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        document.querySelector('.bundle-collection').classList.add('loaded');
+      });      
+    } else {
+      document.querySelector('.bundle-collection').classList.add('loaded');
+    }
+
+    //!!!! ADD TO CART !!!!
+document.querySelectorAll('.bundle-add-to-cart').forEach(atc => {
+  atc.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    if (!atc.getAttribute('disabled')) {
+      const _bundle_id = Date.now();
+      const formData = { items: [] };
+
+      window.bundleComponentsSelected.forEach((component, index) => {
+        const variantId = parseInt(component);
+        if (isNaN(variantId)) return; // Skip invalid IDs
+
+        const itemData = {
+          id: variantId,
+          quantity: 1,
+          properties: {
+            _bundle_id: String(_bundle_id),
+            _bundle_components: window.bundleComponentsSelected.length.toString(),
+            _bundle_component_position: index.toString(),
+            _bundle_url: 'Bundle'
+          }
+        };
+
+        if (urlParams.get('bundle-id') && removeKeys.length) {
+          itemData.properties._remove_bundle_id = urlParams.get('bundle-id');
+          removeKeys = [];
+        }
+
+        formData.items.push(itemData);
+      });
+
+      fetch(`${window.Shopify.routes.root}cart/add.js`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(response => response.json())
+        .then(response => {
+          const cartDrawer = document.querySelector('cart-drawer') || document.querySelector('cart-notification');
+
+          // If cart drawer is present, refresh its content
+          if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
+            cartDrawer.renderContents(response);
+          } else {
+            // Fallback to redirect if cart drawer isn't available
+            window.location = window.Shopify.routes.cart_url;
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  });
+});
+
+    document.querySelector('.bundle-pick-products').addEventListener('click', function(e) {
+      e.preventDefault();
+     // location.hash = "#ProductGridContainer";
+      const targetDiv = document.getElementById('ProductGridContainer');
+      if (targetDiv) {
+        targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+
+    document.querySelector('.bundle-go-up').addEventListener('click', function(e) {
+      e.preventDefault();
+      location.hash = "#bundle-collection-summary";
+    });
+
+    function bundleBuildSelection(array, total) {
+      var bundleBoxes = document.querySelectorAll('.bundle-selection.bundle-selection-normal .bundle-selection-box');
+      var bundleBoxesSticky = document.querySelectorAll('.bundle-selection.bundle-selection-sticky .bundle-selection-box');
+      if(window.bundleComponentsSelected.length < 4) {
+        document.querySelectorAll('.bundle-component-quantity-selector .bundle-plus').forEach(plusQuantity => {
+          plusQuantity.classList.remove('disabled');
+        }); 
+        document.querySelectorAll('.bundle-limit').forEach(bundleLimit => {
+          bundleLimit.classList.remove('show');
+        });
+      } else {
+        document.querySelectorAll('.bundle-component-quantity-selector .bundle-plus').forEach(plusQuantity => {
+          plusQuantity.classList.add('disabled');
+        });
+        document.querySelectorAll('.bundle-limit').forEach(bundleLimit => {
+          bundleLimit.classList.add('show');
+        });
+      }
+      var componentsToRemove = [];
+      for(var i = 1; i <= 4; i++) {
+        if(array[i-1]) {
+            bundleBoxes[i-1].innerHTML = `<img src="`+document.querySelector('.bundle-component-select[data-variant-id="'+array[i-1]+'"]').dataset.variantImage+`" alt="">`;
+            bundleBoxesSticky[i-1].innerHTML = `<img src="`+document.querySelector('.bundle-component-select[data-variant-id="'+array[i-1]+'"]').dataset.variantImage+`" alt="">`;
+        } else {
+            bundleBoxes[i-1].innerHTML = `<span class="icon-bundle-bottle"></span>`;
+            bundleBoxesSticky[i-1].innerHTML = `<span class="icon-bundle-bottle"></span>`;
+        }
+
+        if(i > total && array[i-1]) {
+          componentsToRemove.push(array[i-1]);              
+        }            
+      }
+
+      if(componentsToRemove.length) {
+        for(var j = 0; j<componentsToRemove.length; j++) {
+          var variantIdToRemove = componentsToRemove[j]; 
+          var selectedQuantity = document.querySelector('input[name="bundle-component['+variantIdToRemove+']"]');
+          if(selectedQuantity.value == 1) {
+            selectedQuantity.closest('.bundle-component-actions').classList.remove('selected');
+          }
+          selectedQuantity.value = parseInt(selectedQuantity.value) - 1;
+          window.bundleCost -= parseInt(document.querySelector('.bundle-component-select[data-variant-id="'+variantIdToRemove+'"]').dataset.variantPrice);
+          var indexOfVariantInBundle = window.bundleComponentsSelected.lastIndexOf(parseInt(variantIdToRemove));
+          window.bundleComponentsSelected.splice(indexOfVariantInBundle,1);
+        }          
+      }
+
+      bundleTotalUpdate(window.bundleCost, window.bundleComponentsSelected);
+
+      /* enable/disable add to cart buttons */
+      if(array.length == total) {
+        document.querySelectorAll('.bundle-add-to-cart[disabled]').forEach(atc => {
+          atc.removeAttribute('disabled');
+        });        
+      } else {
+        document.querySelectorAll('.bundle-add-to-cart:not([disabled])').forEach(atc => {
+          atc.setAttribute('disabled',true);
+        });
+      }
+    }
+
+    function bundleTotalUpdate(cost, array) {
+        var bundleSubtotal = document.querySelector('.bundle-collection-summary .bundle-subtotal');
+        var bundleSubtotalFooter = document.querySelector('.bundle-footer-fixed .bundle-subtotal');
+        var bundleSubtotalCost = document.querySelector('.bundle-collection-summary .bundle-subtotal-cost');
+        var bundleSubtotalCostFooter = document.querySelector('.bundle-footer-fixed .bundle-subtotal-cost');
+        var bundleDiscounts = {
+            2: 10,
+            3: 15,
+            4: 20
+        }
+        var bundleDiscountCost = cost - cost * (bundleDiscounts[array.length]/100);
+
+        bundleSubtotal.innerText = "Subtotal ("+array.length+" item"+(array.length == 1 ? "": "s")+")";
+        bundleSubtotalFooter.innerText = "Subtotal ("+array.length+" item"+(array.length == 1 ? "": "s")+")";
+        if(array.length>1) {
+          bundleSubtotalCost.innerHTML = "<span class='original-cost'>$"+(cost/100).toFixed(2)+"</span> $"+(bundleDiscountCost/100).toFixed(2); 
+          bundleSubtotalCostFooter.innerHTML = "<span class='original-cost'>$"+(cost/100).toFixed(2)+"</span> $"+(bundleDiscountCost/100).toFixed(2); 
+        } else {
+          bundleSubtotalCost.innerHTML = "$"+(cost/100).toFixed(2); 
+          bundleSubtotalCostFooter.innerHTML = "$"+(cost/100).toFixed(2); 
+        }
+    }
+</script>
+
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-product-grid.name",
+  "class": "section",
+  "settings": [
+     {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured-collection.settings.collection.label"
+    },
+    {
+      "type": "text",
+      "id": "pack_item_heading",
+      "label": "Item Placeholder",
+      "default":"Build Your Own Bundle"
+    },
+    {
+      "type": "text",
+      "id": "pack_item_subheading",
+      "label": "Item Placeholder",
+      "default":"HOW MANY DO YOU NEED"
+    },
+    {
+      "type": "image_picker",
+      "id": "item_placeholder",
+      "label": "Item Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "qty_discount_1",
+      "label": "Discount Quantity Text 1",
+      "default":"10% OFF"
+    },
+    {
+      "type": "text",
+      "id": "pack_item_text_1",
+      "label":"Pack Item Text 1",
+      "default":"2 Top"
+    },
+    {
+      "type": "text",
+      "id": "qty_discount_2",
+      "label": "Discount Quantity Text 2",
+      "default":"15% OFF"
+    },
+    {
+      "type": "text",
+      "id": "pack_item_text_2",
+      "label":"Pack Item Text 2",
+      "default":"3 Top"
+    },
+    {
+      "type": "text",
+      "id": "qty_discount_3",
+      "label": "Discount Quantity Text 2",
+      "default":"25% OFF"
+    },
+    {
+      "type": "text",
+      "id": "pack_item_text_3",
+      "label":"Pack Item Text 3",
+      "default":"4 Top"
+    },
+    {
+      "type": "text",
+      "id": "bundle_warning",
+      "label":"Bundle Warning Text",
+      "default":"You have reached the maximum of bottles in your bundle."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.featured-collection.settings.products_to_show.label"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 16,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
+      "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+    "presets": [
+      {
+        "name": "Collection Bundle"
+      }
+    ],
+    "enabled_on": {
+    "templates": ["page"],
+    "groups": ["custom.bundle"]
+   }
+  }
+{% endschema %}
+
+
+<!-- ***************************************bundle-card-product.liquid********************************** -->
+{% comment %}
+Renders a product card
+
+Accepts:
+- card_product: {Object} Product Liquid object (optional)
+- media_aspect_ratio: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+- image_shape: {String} Image mask to apply to the product image card. Values are "arch", "blob", "chevronleft", "chevronright", "diamond", "parallelogram", and "round". (optional)
+- show_secondary_image: {Boolean} Show the secondary image on hover. Default: false (optional)
+- show_vendor: {Boolean} Show the product vendor. Default: false
+- show_rating: {Boolean} Show the product rating. Default: false
+- extend_height: {Boolean} Card height extends to available container space. Default: true (optional)
+- lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+- show_quick_add: {Boolean} Show the quick add button.
+- section_id: {String} The ID of the section that contains this card.
+- horizontal_class: {Boolean} Add a card--horizontal class if set to true. Default: false (optional)
+- horizontal_quick_add: {Boolean} Changes the quick add button styles when set to true. Default: false (optional)
+- placeholder_image: {String} The placeholder image to use when no product exists. Default: 'product-apparel-2' (optional)
+
+Usage:
+{% render 'card-product', show_vendor: section.settings.show_vendor %}
+{% endcomment %}
+
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+{{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
+
+{%- if card_product and card_product != empty -%}
+{%- liquid
+  assign ratio = 1
+  if card_product.featured_media and media_aspect_ratio == 'portrait'
+    assign ratio = 0.8
+  elsif card_product.featured_media and media_aspect_ratio == 'adapt'
+    assign ratio = card_product.featured_media.aspect_ratio
+  endif
+  if ratio == 0 or ratio == null
+    assign ratio = 1
+  endif
+-%}
+
+{% capture bundle_html %}
+<div class="card__information bundle-component">
+<div class="bundle-component-description">
+ <div class="bundle-component-description-header"> 
+<h3 class="card__heading h5">{{ card_product.title }}</h3>
+
+  <div class="bundle-component-actions" style="flex:inherit">
+    <a href="#" class="bundle-component-select" data-variant-price="{{ card_product.price }}" data-variant-image="{{ card_product.featured_media|img_url:"master" }}" data-variant-id="{{ card_product.selected_or_first_available_variant.id }}">
+    {% render 'icon-bundle-select' %} 
+    </a>
+    <div class="bundle-component-quantity">
+      <a href="#" class="bundle-component-remove">{% render 'icon-bundle-remove' %}</a>
+      <div class="bundle-component-quantity-selector">
+        <button class="bundle-minus">{% render 'icon-bundle-quantity-minus' %} </button>
+        <input type="number" disabled="" name="bundle-component[{{ card_product.selected_or_first_available_variant.id }}]" value="0" min="0" max="4">
+        <button class="bundle-plus">{% render 'icon-bundle-quantity-plus' %}</button>
+      </div>
+    </div>
+  </div>
+  </div> 
+
+<div class="card-information">
+  <span class="shortDescription">{{ product.description }}</span>
+  <span class="caption-large light"></span>
+  </div>
+ {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+</div>
+<img src="{{ card_product.featured_media|img_url:"master" }}" style="display: none;" alt="" loading="lazy">
+</div>     
+{% endcapture %} 
+
+<div class="loft_product_card card-wrapper product-card-wrapper underline-links-hover">
+  <div
+    class="
+      card card--{{ settings.card_style }}
+      {% if card_product.featured_media %} card--media{% else %} card--text{% endif %}
+      {% if settings.card_style == 'card' %} color-{{ settings.card_color_scheme }} gradient{% endif %}
+      {% if image_shape and image_shape != 'default' %} card--shape{% endif %}
+      {% if extend_height %} card--extend-height{% endif %}
+      {% if card_product.featured_media == nil and settings.card_style == 'card' %} ratio{% endif %}
+      {% if horizontal_class %} card--horizontal{% endif %}
+    "
+    style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+  >
+    <div
+      class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %}{% if card_product.featured_media or settings.card_style == 'standard' %} ratio{% endif %}"
+      style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+    >
+      <div class="card_upper_info hidden">
+        <a
+          href="{{ card_product.url }}"
+          id="CardLink-{{ section_id }}-{{ card_product.id }}"
+          class="full-unstyled-link"
+          aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} Badge-{{ section_id }}-{{ card_product.id }}"
+        >
+          <h2
+            class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
+            {% if card_product.featured_media or settings.card_style == 'card' %}
+              id="title-{{ section_id }}-{{ card_product.id }}"
+            {% endif %}
+          >
+            {{ card_product.title | escape }}
+          </h2>
+        </a>
+        {%- if show_vendor -%}
+          <p>{{ card_product.vendor }}</p>
+        {%- endif -%}
+      </div>
+      <a href="{{ card_product.url }}">
+        {%- if card_product.featured_media -%}
+          <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
+            <div class="media media--transparent media--hover-effect">
+              {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+
+              <img
+                srcset="
+                  {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                  {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                  {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                  {%- if card_product.featured_media.width >= 940 -%}{{ card_product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                  {%- if card_product.featured_media.width >= 1066 -%}{{ card_product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
+                  {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+                "
+                src="{{ card_product.featured_media | image_url: width: 533 }}"
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                alt="{{ card_product.featured_media.alt | escape }}"
+                class="motion-reduce"
+                {% unless lazy_load == false %}
+                  loading="lazy"
+                {% endunless %}
+                width="{{ card_product.featured_media.width }}"
+                height="{{ card_product.featured_media.height }}"
+              >
+
+              {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+
+              {%- if card_product.media[1] != null and show_secondary_image -%}
+                <img
+                  srcset="
+                    {%- if card_product.media[1].width >= 165 -%}{{ card_product.media[1] | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if card_product.media[1].width >= 360 -%}{{ card_product.media[1] | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if card_product.media[1].width >= 533 -%}{{ card_product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if card_product.media[1].width >= 720 -%}{{ card_product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
+                    {%- if card_product.media[1].width >= 940 -%}{{ card_product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
+                    {%- if card_product.media[1].width >= 1066 -%}{{ card_product.media[1] | image_url: width: 1066 }} 1066w,{%- endif -%}
+                    {{ card_product.media[1] | image_url }} {{ card_product.media[1].width }}w
+                  "
+                  src="{{ card_product.media[1] | image_url: width: 533 }}"
+                  sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                  alt=""
+                  class="motion-reduce"
+                  loading="lazy"
+                  width="{{ card_product.media[1].width }}"
+                  height="{{ card_product.media[1].height }}"
+                >
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+        <div class="card__content card__badge_content 002 hidden">
+          <div class="card__badge {{ settings.badge_position }}">
+            {%- if card_product.available == false -%}
+              <span
+                id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
+                class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"
+              >
+                {{- 'products.product.sold_out' | t -}}
+              </span>
+            {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
+              <span
+                id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
+                class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
+              >
+                {{- 'products.product.on_sale' | t -}}
+              </span>
+            {%- endif -%}
+          </div>
+        </div>
+      </a>
+    </div>
+
+{{ bundle_html }}
+
+    <div class="card__content card__lower_content 003 hidden">
+      <div class="card__information card__left_content">
+        <div class="card-information">
+          {%- if show_rating and card_product.metafields.reviews.rating.value != blank -%}
+            {% liquid
+              assign rating_decimal = 0
+              assign decimal = card_product.metafields.reviews.rating.value.rating | modulo: 1
+              if decimal >= 0.3 and decimal <= 0.7
+                assign rating_decimal = 0.5
+              elsif decimal > 0.7
+                assign rating_decimal = 1
+              endif
+            %}
+            <div
+              class="rating"
+              role="img"
+              aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_product.metafields.reviews.rating.value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}"
+            >
+              <span
+                aria-hidden="true"
+                class="rating-star"
+                style="--rating: {{ card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+              ></span>
+            </div>
+            <p class="rating-text caption">
+              <span aria-hidden="true">
+                {{- card_product.metafields.reviews.rating.value }} /
+                {{ card_product.metafields.reviews.rating.value.scale_max -}}
+              </span>
+            </p>
+            <p class="rating-count caption">
+              <span aria-hidden="true">({{ card_product.metafields.reviews.rating_count }})</span>
+              <span class="visually-hidden">
+                {{- card_product.metafields.reviews.rating_count }}
+                {{ 'accessibility.total_reviews' | t -}}
+              </span>
+            </p>
+          {%- endif -%}
+
+          {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+          {%- if card_product.quantity_price_breaks_configured? -%}
+            <div class="card__information-volume-pricing-note">
+              <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
+            </div>
+          {%- endif -%}
+          {% render 'collection-variant-picker', product: card_product %}
+        </div>
+      </div>
+      <div class="card__content_right">
+        {% if settings.enable_wishlist %}
+          {%- render 'button-wishlist', card_product: card_product -%}
+        {% endif %}
+        {% if settings.enable_compare %}
+          <span
+            class="e-compare"
+            id="wid_{{ card_product.handle }}"
+            data-handle="{{ card_product.handle }}"
+          >
+            {%- render 'icon_compare' -%}
+          </span>
+        {% endif %}
+        {%- if show_quick_add -%}
+          <div class="quick-add no-js-hidden">
+            {%- liquid
+              assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id
+              assign qty_rules = false
+              if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
+                assign qty_rules = true
+              endif
+            -%}
+
+            <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
+              <button
+                id="{{ product_form_id }}-submit"
+                type="submit"
+                name="add"
+                class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add animate-arrow{% endif %} e-quick-view"
+                aria-haspopup="dialog"
+                aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
+                data-product-url="{{ card_product.url }}"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M13 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-1.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/><path fill-rule="evenodd" d="M10 4c-2.476 0-4.348 1.23-5.577 2.532a9.266 9.266 0 0 0-1.4 1.922 5.98 5.98 0 0 0-.37.818c-.082.227-.153.488-.153.728s.071.501.152.728c.088.246.213.524.371.818.317.587.784 1.27 1.4 1.922 1.229 1.302 3.1 2.532 5.577 2.532 2.476 0 4.348-1.23 5.577-2.532a9.265 9.265 0 0 0 1.4-1.922 5.98 5.98 0 0 0 .37-.818c.082-.227.153-.488.153-.728s-.071-.501-.152-.728a5.984 5.984 0 0 0-.371-.818 9.269 9.269 0 0 0-1.4-1.922c-1.229-1.302-3.1-2.532-5.577-2.532Zm-5.999 6.002v-.004c.004-.02.017-.09.064-.223a4.5 4.5 0 0 1 .278-.608 7.768 7.768 0 0 1 1.17-1.605c1.042-1.104 2.545-2.062 4.487-2.062 1.942 0 3.445.958 4.486 2.062a7.77 7.77 0 0 1 1.17 1.605c.13.24.221.447.279.608.047.132.06.203.064.223v.004c-.004.02-.017.09-.064.223a4.503 4.503 0 0 1-.278.608 7.768 7.768 0 0 1-1.17 1.605c-1.042 1.104-2.545 2.062-4.487 2.062-1.942 0-3.445-.958-4.486-2.062a7.766 7.766 0 0 1-1.17-1.605 4.5 4.5 0 0 1-.279-.608c-.047-.132-.06-.203-.064-.223Z"/>
+                </svg>
+                {%- if horizontal_quick_add -%}
+                  <span class="icon-wrap">{% render 'icon-arrow' %}</span>
+                {%- endif -%}
+                {%- render 'loading-spinner' -%}
+              </button>
+            </modal-opener>
+            <quick-add-modal id="QuickAdd-{{ card_product.id }}" class="quick-add-modal">
+              <div
+                role="dialog"
+                aria-label="{{ 'products.product.choose_product_options' | t: product_name: card_product.title | escape }}"
+                aria-modal="true"
+                class="quick-add-modal__content global-settings-popup"
+                tabindex="-1"
+              >
+                <button
+                  id="ModalClose-{{ card_product.id }}"
+                  type="button"
+                  class="quick-add-modal__toggle"
+                  aria-label="{{ 'accessibility.close' | t }}"
+                >
+                  {% render 'icon-close' %}
+                </button>
+                <div id="QuickAddInfo-{{ card_product.id }}" class="quick-add-modal__content-info"></div>
+              </div>
+            </quick-add-modal>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="card__badge {{ settings.badge_position }}">
+        {%- if card_product.available == false -%}
+          <span
+            id="Badge-{{ section_id }}-{{ card_product.id }}"
+            class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"
+          >
+            {{- 'products.product.sold_out' | t -}}
+          </span>
+        {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
+          <span
+            id="Badge-{{ section_id }}-{{ card_product.id }}"
+            class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
+          >
+            {{- 'products.product.on_sale' | t -}}
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{%- else -%}
+<div class="card-wrapper product-card-wrapper underline-links-hover">
+  <div
+    class="
+      card card--{{ settings.card_style }}
+      {% if extend_height %} card--extend-height{% endif %}
+      {% if settings.card_style == 'card' %} color-{{ settings.card_color_scheme }} gradient{% endif %}
+    "
+    style="--ratio-percent: 100%;"
+  >
+    <div
+      class="card__inner{% if settings.card_style == 'standard' %} color-{{ settings.card_color_scheme }} gradient{% endif %} ratio"
+      style="--ratio-percent: 100%;"
+    >
+      <div class="card__media">
+        <div class="media media--transparent">
+          {%- if placeholder_image -%}
+            {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- else -%}
+            {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="card__content 01">
+      <div class="card__information">
+        <h3 class="card__heading card__heading--placeholder{% if settings.card_style == 'standard' %} h5{% endif %}">
+          <a role="link" aria-disabled="true" class="full-unstyled-link">
+            {{ 'onboarding.product_title' | t }}
+          </a>
+        </h3>
+        <div class="card-information">
+          {%- if show_vendor -%}
+            <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+            <div class="caption-with-letter-spacing light">{{ 'products.product.vendor' | t }}</div>
+          {%- endif -%}
+          {% render 'price', show_compare_at_price: true %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+<!--*******************snippet => icon-bundle-bottle.liquid for placeholder pack items ****************-->
+<svg class="bundle-bottle" width="44" height="103" viewBox="0 0 44 103" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="22" width="42" height="80" rx="2" fill="white" stroke="#1D4945" stroke-width="0.550249"/>
+    <rect x="5" y="15" width="34" height="7" fill="white" stroke="#1D4945" stroke-width="0.550249"/>
+    <rect x="1" y="1" width="42" height="14.3065" rx="2" fill="white" stroke="#1D4945" stroke-width="0.550249"/>
+    <g clip-path="url(#clip0_122_6224)">
+    <g clip-path="url(#clip1_122_6224)">
+    <path d="M1.85096 7.79146C2.01801 8.1511 2.49466 8.1511 2.66243 7.79146L3.30757 6.40328C3.51566 5.95527 4.01823 5.7367 4.44088 5.94752C4.87794 6.16532 5.05866 6.72726 4.84482 7.18767L3.1326 10.874C2.95836 11.2484 2.60123 11.4755 2.20881 11.4553C1.84736 11.4367 1.52911 11.191 1.36711 10.8422L0.835733 9.69819C0.668688 9.33854 0.191313 9.33854 0.0242677 9.69819L-0.522229 10.874C-0.696474 11.2484 -1.05361 11.4755 -1.44602 11.4553C-1.80747 11.4367 -2.12572 11.191 -2.28772 10.8422L-3.98482 7.18767C-4.19866 6.72726 -4.01794 6.16532 -3.58088 5.94752C-3.15823 5.7367 -2.65565 5.95527 -2.44757 6.40328L-1.80243 7.79146C-1.63538 8.1511 -1.15873 8.1511 -0.990963 7.79146L-0.329983 6.3684C-0.329983 6.3684 -0.22486 6.14517 -0.0506144 6.02426C0.123631 5.90334 0.265475 5.86304 0.43036 5.86304C0.595245 5.86304 0.73709 5.90334 0.911335 6.02426C1.08558 6.14517 1.1907 6.3684 1.1907 6.3684L1.85168 7.79146H1.85096Z" fill="#E6E6E6"/>
+    <path d="M7.19165 6.53503C6.7222 6.53503 6.34131 6.94506 6.34131 7.45042V10.5399C6.34131 11.0453 6.7222 11.4553 7.19165 11.4553C7.66111 11.4553 8.042 11.0453 8.042 10.5399V7.45042C8.042 6.94506 7.66111 6.53503 7.19165 6.53503Z" fill="#E6E6E6"/>
+    <path d="M7.19322 6.0669C7.65967 6.0669 8.0378 5.65984 8.0378 5.15772C8.0378 4.65559 7.65967 4.24854 7.19322 4.24854C6.72677 4.24854 6.34863 4.65559 6.34863 5.15772C6.34863 5.65984 6.72677 6.0669 7.19322 6.0669Z" fill="#E6E6E6"/>
+    <path d="M8.62402 11.0654C8.62402 10.867 8.77235 10.7089 8.95523 10.7089C9.13812 10.7089 9.28644 10.867 9.28644 11.0654C9.28644 11.2638 9.13956 11.4219 8.95523 11.4219C8.77091 11.4219 8.62402 11.2623 8.62402 11.0654ZM8.67082 11.0654C8.67082 11.2336 8.79755 11.3716 8.95523 11.3716C9.11292 11.3716 9.23964 11.2336 9.23964 11.0654C9.23964 10.8972 9.11292 10.7592 8.95523 10.7592C8.79755 10.7592 8.67082 10.8941 8.67082 11.0654ZM8.94731 11.1088H8.88035V11.27H8.82851V10.8616H8.98331C9.0474 10.8616 9.105 10.9104 9.105 10.9863C9.105 11.077 9.03012 11.1073 9.00851 11.1073L9.11004 11.2708H9.04596L8.94731 11.1096V11.1088ZM8.88035 10.9104V11.0584H8.98331C9.01644 11.0584 9.05172 11.0282 9.05172 10.9863C9.05172 10.9406 9.01572 10.9104 8.98331 10.9104H8.88035Z" fill="#E6E6E6"/>
+    </g>
+    <g clip-path="url(#clip2_122_6224)">
+    <path d="M23.3104 7.79146C23.4775 8.1511 23.9541 8.1511 24.1219 7.79146L24.767 6.40328C24.9751 5.95527 25.4777 5.7367 25.9004 5.94752C26.3374 6.16532 26.5181 6.72726 26.3043 7.18767L24.5921 10.874C24.4178 11.2484 24.0607 11.4755 23.6683 11.4553C23.3068 11.4367 22.9886 11.191 22.8266 10.8422L22.2952 9.69819C22.1282 9.33854 21.6508 9.33854 21.4837 9.69819L20.9372 10.874C20.763 11.2484 20.4059 11.4755 20.0135 11.4553C19.652 11.4367 19.3338 11.191 19.1717 10.8422L17.4747 7.18767C17.2608 6.72726 17.4415 6.16532 17.8786 5.94752C18.3012 5.7367 18.8038 5.95527 19.0119 6.40328L19.657 7.79146C19.8241 8.1511 20.3007 8.1511 20.4685 7.79146L21.1295 6.3684C21.1295 6.3684 21.2346 6.14517 21.4089 6.02426C21.5831 5.90334 21.7249 5.86304 21.8898 5.86304C22.0547 5.86304 22.1966 5.90334 22.3708 6.02426C22.5451 6.14517 22.6502 6.3684 22.6502 6.3684L23.3112 7.79146H23.3104Z" fill="#E6E6E6"/>
+    <path d="M28.6511 6.53503C28.1817 6.53503 27.8008 6.94506 27.8008 7.45042V10.5399C27.8008 11.0453 28.1817 11.4553 28.6511 11.4553C29.1206 11.4553 29.5015 11.0453 29.5015 10.5399V7.45042C29.5015 6.94506 29.1206 6.53503 28.6511 6.53503Z" fill="#E6E6E6"/>
+    <path d="M28.6527 6.0669C29.1191 6.0669 29.4973 5.65984 29.4973 5.15772C29.4973 4.65559 29.1191 4.24854 28.6527 4.24854C28.1862 4.24854 27.8081 4.65559 27.8081 5.15772C27.8081 5.65984 28.1862 6.0669 28.6527 6.0669Z" fill="#E6E6E6"/>
+    <path d="M15.1238 6.53503C14.6543 6.53503 14.2734 6.94506 14.2734 7.45042V10.5399C14.2734 11.0453 14.6543 11.4553 15.1238 11.4553C15.5932 11.4553 15.9741 11.0453 15.9741 10.5399V7.45042C15.9741 6.94506 15.5932 6.53503 15.1238 6.53503Z" fill="#E6E6E6"/>
+    <path d="M15.1258 6.0669C15.5923 6.0669 15.9704 5.65984 15.9704 5.15772C15.9704 4.65559 15.5923 4.24854 15.1258 4.24854C14.6594 4.24854 14.2812 4.65559 14.2812 5.15772C14.2812 5.65984 14.6594 6.0669 15.1258 6.0669Z" fill="#E6E6E6"/>
+    <path d="M30.0835 11.0654C30.0835 10.867 30.2318 10.7089 30.4147 10.7089C30.5976 10.7089 30.7459 10.867 30.7459 11.0654C30.7459 11.2638 30.599 11.4219 30.4147 11.4219C30.2304 11.4219 30.0835 11.2623 30.0835 11.0654ZM30.1303 11.0654C30.1303 11.2336 30.257 11.3716 30.4147 11.3716C30.5724 11.3716 30.6991 11.2336 30.6991 11.0654C30.6991 10.8972 30.5724 10.7592 30.4147 10.7592C30.257 10.7592 30.1303 10.8941 30.1303 11.0654ZM30.4068 11.1088H30.3398V11.27H30.288V10.8616H30.4428C30.5069 10.8616 30.5645 10.9104 30.5645 10.9863C30.5645 11.077 30.4896 11.1073 30.468 11.1073L30.5695 11.2708H30.5054L30.4068 11.1096V11.1088ZM30.3398 10.9104V11.0584H30.4428C30.4759 11.0584 30.5112 11.0282 30.5112 10.9863C30.5112 10.9406 30.4752 10.9104 30.4428 10.9104H30.3398Z" fill="#E6E6E6"/>
+    </g>
+    <g clip-path="url(#clip3_122_6224)">
+    <path d="M44.7704 7.79146C44.9374 8.1511 45.4141 8.1511 45.5819 7.79146L46.227 6.40328C46.4351 5.95527 46.9377 5.7367 47.3603 5.94752C47.7974 6.16532 47.9781 6.72726 47.7642 7.18767L46.052 10.874C45.8778 11.2484 45.5207 11.4755 45.1282 11.4553C44.7668 11.4367 44.4485 11.191 44.2865 10.8422L43.7552 9.69819C43.5881 9.33854 43.1107 9.33854 42.9437 9.69819L42.3972 10.874C42.223 11.2484 41.8658 11.4755 41.4734 11.4553C41.112 11.4367 40.7937 11.191 40.6317 10.8422L38.9346 7.18767C38.7208 6.72726 38.9015 6.16532 39.3386 5.94752C39.7612 5.7367 40.2638 5.95527 40.4719 6.40328L41.117 7.79146C41.2841 8.1511 41.7607 8.1511 41.9285 7.79146L42.5895 6.3684C42.5895 6.3684 42.6946 6.14517 42.8688 6.02426C43.0431 5.90334 43.1849 5.86304 43.3498 5.86304C43.5147 5.86304 43.6565 5.90334 43.8308 6.02426C44.005 6.14517 44.1101 6.3684 44.1101 6.3684L44.7711 7.79146H44.7704Z" fill="#E6E6E6"/>
+    <path d="M36.5837 6.53503C36.1143 6.53503 35.7334 6.94506 35.7334 7.45042V10.5399C35.7334 11.0453 36.1143 11.4553 36.5837 11.4553C37.0532 11.4553 37.4341 11.0453 37.4341 10.5399V7.45042C37.4341 6.94506 37.0532 6.53503 36.5837 6.53503Z" fill="#E6E6E6"/>
+    <path d="M36.5858 6.0669C37.0522 6.0669 37.4304 5.65984 37.4304 5.15772C37.4304 4.65559 37.0522 4.24854 36.5858 4.24854C36.1193 4.24854 35.7412 4.65559 35.7412 5.15772C35.7412 5.65984 36.1193 6.0669 36.5858 6.0669Z" fill="#E6E6E6"/>
+    </g>
+    </g>
+    <path d="M42.725 4V11.7035H43.275V4H42.725ZM1.275 11.7035V4H0.725V11.7035H1.275Z" fill="#1D4945"/>
+    <path d="M23.2388 58.1399C23.3754 58.3983 23.7631 58.3983 23.8997 58.1399L24.4254 57.141C24.5947 56.8189 25.0043 56.6618 25.3484 56.8124C25.7048 56.9696 25.8509 57.3735 25.6775 57.7047L24.2834 60.357C24.1414 60.6259 23.8505 60.7895 23.531 60.7753C23.2361 60.7623 22.978 60.5856 22.8456 60.3349L22.4127 59.5115C22.2762 59.253 21.8884 59.253 21.7519 59.5115L21.3067 60.357C21.1647 60.6259 20.8739 60.7895 20.5544 60.7753C20.2594 60.7623 20.0014 60.5843 19.8689 60.3336L18.4871 57.7047C18.3123 57.3735 18.4598 56.9696 18.8162 56.8124C19.1603 56.6605 19.5699 56.8176 19.7392 57.141L20.2649 58.1399C20.4014 58.3983 20.7892 58.3983 20.9258 58.1399L21.4638 57.1164C21.4638 57.1164 21.5498 56.9553 21.6904 56.8683C21.8311 56.7813 21.9471 56.7527 22.0823 56.7527C22.2175 56.7527 22.3322 56.7813 22.4742 56.8683C22.6162 56.9553 22.7008 57.1164 22.7008 57.1164L23.2388 58.1399Z" fill="#D1D3D4"/>
+    <path d="M29.015 66.1557C28.7413 66.2878 28.7413 66.6631 29.015 66.7952L30.0725 67.304C30.4136 67.4678 30.58 67.8642 30.4205 68.1972C30.2541 68.5421 29.8264 68.6835 29.4757 68.5157L26.6674 67.1665C26.3827 67.0291 26.2094 66.7477 26.2245 66.4385C26.2383 66.153 26.4253 65.9033 26.6908 65.7751L27.5627 65.3562C27.8364 65.2241 27.8364 64.8488 27.5627 64.7167L26.6674 64.2859C26.3827 64.1485 26.2094 63.867 26.2245 63.5578C26.2383 63.2724 26.4267 63.0227 26.6921 62.8945L29.4757 61.5572C29.8264 61.3881 30.2541 61.5308 30.4205 61.8757C30.5814 62.2087 30.415 62.6051 30.0725 62.769L29.015 63.2777C28.7413 63.4098 28.7413 63.7851 29.015 63.9172L30.0987 64.4379C30.0987 64.4379 30.2692 64.5211 30.3613 64.6572C30.4535 64.7933 30.4837 64.9056 30.4837 65.0365C30.4837 65.1673 30.4535 65.2783 30.3613 65.4157C30.2692 65.5531 30.0987 65.6351 30.0987 65.6351L29.015 66.1557Z" fill="#D1D3D4"/>
+    <path d="M22.997 52.105C22.997 52.676 22.5339 53.1374 21.9637 53.1374C21.3935 53.1374 20.9303 52.6747 20.9303 52.105C20.9303 51.5353 21.3935 51.0726 21.9637 51.0726C22.5339 51.0726 22.997 51.5353 22.997 52.105ZM12.0919 55.1541C11.6877 55.5579 11.6877 56.2119 12.0919 56.6144C12.4962 57.0182 13.1507 57.0182 13.5536 56.6144C13.9579 56.2105 13.9579 55.5566 13.5536 55.1541C13.1494 54.7502 12.4948 54.7502 12.0919 55.1541ZM8 65.0139C8 65.5849 8.46314 66.0463 9.03336 66.0463C9.60491 66.0463 10.0667 65.5836 10.0667 65.0139C10.0667 64.4429 9.60357 63.9815 9.03336 63.9815C8.4618 63.9815 8 64.4442 8 65.0139ZM30.3738 55.1541C29.9695 55.5579 29.9695 56.2119 30.3738 56.6144C30.778 57.0182 31.4325 57.0182 31.8354 56.6144C32.2397 56.2105 32.2397 55.5566 31.8354 55.1541C31.4312 54.7502 30.7767 54.7502 30.3738 55.1541ZM34.894 63.9815C34.3225 63.9815 33.8607 64.4442 33.8607 65.0139C33.8607 65.5836 34.3238 66.0463 34.894 66.0463C35.4642 66.0463 35.9274 65.5836 35.9274 65.0139C35.9274 64.4442 35.4642 63.9815 34.894 63.9815ZM31.8354 74.8738C32.2397 74.4699 32.2397 73.816 31.8354 73.4135C31.4312 73.0096 30.7767 73.0096 30.3738 73.4135C29.9695 73.8173 29.9695 74.4713 30.3738 74.8738C30.778 75.2776 31.4325 75.2776 31.8354 74.8738ZM22.6945 78.6971C23.0988 78.2932 23.0988 77.6393 22.6945 77.2368C22.2903 76.8329 21.6357 76.8329 21.2328 77.2368C20.8286 77.6406 20.8286 78.2946 21.2328 78.6971C21.6371 79.101 22.2916 79.101 22.6945 78.6971ZM13.5536 74.8738C13.9579 74.4699 13.9579 73.816 13.5536 73.4135C13.1494 73.0096 12.4948 73.0096 12.0919 73.4135C11.6877 73.8173 11.6877 74.4713 12.0919 74.8738C12.4962 75.2776 13.1507 75.2776 13.5536 74.8738ZM18.4179 51.7961C18.0043 51.9071 17.7593 52.331 17.8691 52.7442C17.9802 53.1575 18.4045 53.4022 18.8181 53.2925C19.2317 53.1815 19.4767 52.7576 19.3669 52.3444C19.2558 51.9312 18.8315 51.6864 18.4179 51.7961ZM15.113 53.1628C14.7422 53.3768 14.6151 53.8502 14.8292 54.2206C15.0434 54.5911 15.5173 54.7181 15.888 54.5041C16.2588 54.2902 16.386 53.8168 16.1718 53.4463C15.9576 53.0759 15.4838 52.9489 15.113 53.1628ZM10.0962 58.1696C9.88199 58.5401 10.0092 59.0135 10.3799 59.2274C10.7507 59.4414 11.2246 59.3144 11.4387 58.9439C11.6529 58.5735 11.5257 58.1001 11.1549 57.8861C10.7842 57.6722 10.3103 57.7992 10.0962 58.1696ZM8.72683 61.4701C8.61573 61.8833 8.86202 62.3086 9.27563 62.4182C9.68924 62.5292 10.1149 62.2832 10.2247 61.8699C10.3358 61.4567 10.0895 61.0315 9.67586 60.9218C9.26225 60.8108 8.83659 61.0569 8.72683 61.4701ZM8.72415 68.5551C8.83525 68.9683 9.25957 69.213 9.67318 69.1034C10.0868 68.9924 10.3317 68.5684 10.222 68.1552C10.1109 67.742 9.68656 67.4973 9.27295 67.6069C8.85934 67.7179 8.61439 68.1418 8.72415 68.5551ZM10.0921 71.8568C10.3063 72.2273 10.7802 72.3543 11.1509 72.1404C11.5217 71.9264 11.6489 71.453 11.4347 71.0826C11.2205 70.7121 10.7467 70.5851 10.3759 70.799C10.0051 71.013 9.87798 71.4864 10.0921 71.8568ZM15.105 76.869C15.4758 77.083 15.9496 76.9559 16.1638 76.5855C16.3779 76.2151 16.2508 75.7417 15.88 75.5277C15.5092 75.3137 15.0354 75.4408 14.8212 75.8112C14.607 76.1817 14.7342 76.6551 15.105 76.869ZM28.805 76.8744C29.1758 76.6604 29.3029 76.187 29.0888 75.8166C28.8746 75.4461 28.4007 75.3191 28.03 75.5331C27.6592 75.747 27.532 76.2204 27.7462 76.5909C27.9604 76.9613 28.4342 77.0883 28.805 76.8744ZM25.6875 78.209C26.0583 77.995 26.1854 77.5216 25.9713 77.1512C25.7571 76.7808 25.2833 76.6537 24.9125 76.8677C24.5417 77.0817 24.4146 77.5551 24.6287 77.9255C24.8429 78.2959 25.3167 78.423 25.6875 78.209ZM18.9975 78.209C19.3682 77.995 19.4954 77.5216 19.2812 77.1512C19.0671 76.7808 18.5932 76.6537 18.2225 76.8677C17.8517 77.0817 17.7245 77.5551 17.9387 77.9255C18.1529 78.2959 18.6267 78.423 18.9975 78.209ZM33.8218 71.8662C34.036 71.4958 33.9088 71.0224 33.5381 70.8084C33.1673 70.5944 32.6934 70.7215 32.4793 71.0919C32.2651 71.4623 32.3923 71.9357 32.7631 72.1497C33.1338 72.3637 33.6077 72.2366 33.8218 71.8662ZM35.1912 68.5658C35.3023 68.1525 35.056 67.7273 34.6424 67.6176C34.2288 67.5066 33.8031 67.7527 33.6933 68.1659C33.5822 68.5791 33.8285 69.0044 34.2421 69.1141C34.6558 69.2251 35.0814 68.979 35.1912 68.5658ZM35.1938 61.4808C35.0827 61.0676 34.6584 60.8228 34.2448 60.9325C33.8312 61.0435 33.5863 61.4674 33.696 61.8806C33.8071 62.2939 34.2314 62.5386 34.645 62.4289C35.0587 62.3179 35.3036 61.894 35.1938 61.4808ZM33.8259 58.179C33.6117 57.8086 33.1378 57.6815 32.7671 57.8955C32.3963 58.1095 32.2691 58.5829 32.4833 58.9533C32.6975 59.3237 33.1713 59.4508 33.5421 59.2368C33.9129 59.0228 34.04 58.5494 33.8259 58.179ZM28.813 53.1668C28.4422 52.9529 27.9684 53.0799 27.7542 53.4503C27.5401 53.8208 27.6672 54.2942 28.038 54.5081C28.4088 54.7221 28.8826 54.5951 29.0968 54.2246C29.3109 53.8542 29.1838 53.3808 28.813 53.1668ZM25.5095 51.7988C25.0959 51.6878 24.6702 51.9338 24.5605 52.3471C24.4494 52.7603 24.6957 53.1856 25.1093 53.2952C25.5229 53.4062 25.9485 53.1601 26.0583 52.7469C26.1694 52.3337 25.9231 51.9084 25.5095 51.7988Z" fill="#D1D3D4"/>
+    <path d="M27.743 59.3452C27.4795 59.0817 27.0516 59.0804 26.7868 59.3452L25.1727 60.958C24.9092 61.2214 24.9079 61.6493 25.1727 61.9141C25.4375 62.1789 25.8641 62.1789 26.1289 61.9141L27.743 60.3013C28.0064 60.0379 28.0078 59.61 27.743 59.3452Z" fill="#D1D3D4"/>
+    <path d="M28.4638 59.2983C28.8346 59.2983 29.1351 58.9978 29.1351 58.627C29.1351 58.2562 28.8346 57.9557 28.4638 57.9557C28.093 57.9557 27.7925 58.2562 27.7925 58.627C27.7925 58.9978 28.093 59.2983 28.4638 59.2983Z" fill="#D1D3D4"/>
+    <path d="M27.7382 70.7442C28.0017 70.4807 28.003 70.0528 27.7382 69.788L26.1254 68.1739C25.862 67.9105 25.4341 67.9091 25.1693 68.1739C24.9058 68.4374 24.9045 68.8653 25.1693 69.1301L26.7821 70.7442C27.0455 71.0076 27.4734 71.009 27.7382 70.7442Z" fill="#D1D3D4"/>
+    <path d="M28.4565 72.1362C28.8272 72.1362 29.1278 71.8357 29.1278 71.4649C29.1278 71.0941 28.8272 70.7936 28.4565 70.7936C28.0857 70.7936 27.7852 71.0941 27.7852 71.4649C27.7852 71.8357 28.0857 72.1362 28.4565 72.1362Z" fill="#D1D3D4"/>
+    <path d="M16.3387 70.7401C16.6022 71.0035 17.0301 71.0048 17.2949 70.7401L18.909 69.1273C19.1724 68.8638 19.1738 68.4359 18.909 68.1711C18.6442 67.9063 18.2176 67.9063 17.9528 68.1711L16.3387 69.7839C16.0753 70.0473 16.0739 70.4753 16.3387 70.7401Z" fill="#D1D3D4"/>
+    <path d="M15.6186 72.1296C15.9893 72.1296 16.2899 71.8291 16.2899 71.4583C16.2899 71.0875 15.9893 70.787 15.6186 70.787C15.2478 70.787 14.9473 71.0875 14.9473 71.4583C14.9473 71.8291 15.2478 72.1296 15.6186 72.1296Z" fill="#D1D3D4"/>
+    <path d="M16.3431 59.3412C16.0797 59.6046 16.0783 60.0325 16.3431 60.2973L17.9559 61.9114C18.2193 62.1749 18.6473 62.1762 18.912 61.9114C19.1755 61.648 19.1768 61.2201 18.912 60.9553L17.2993 59.3412C17.0358 59.0777 16.6079 59.0764 16.3431 59.3412Z" fill="#D1D3D4"/>
+    <path d="M15.6249 59.2917C15.9957 59.2917 16.2963 58.9912 16.2963 58.6204C16.2963 58.2497 15.9957 57.9491 15.6249 57.9491C15.2542 57.9491 14.9536 58.2497 14.9536 58.6204C14.9536 58.9912 15.2542 59.2917 15.6249 59.2917Z" fill="#D1D3D4"/>
+    <path d="M20.9252 71.9325C20.7886 71.674 20.4009 71.674 20.2643 71.9325L19.7386 72.9313C19.5693 73.2535 19.1597 73.4106 18.8156 73.26C18.4592 73.1028 18.3131 72.6988 18.4865 72.3676L19.8806 69.7154C20.0226 69.4465 20.3135 69.2828 20.633 69.2971C20.9279 69.3101 21.186 69.4868 21.3184 69.7374L21.7513 70.5609C21.8878 70.8194 22.2756 70.8194 22.4121 70.5609L22.8573 69.7154C22.9993 69.4465 23.2901 69.2828 23.6096 69.2971C23.9046 69.3101 24.1626 69.4881 24.2951 69.7387L25.6769 72.3676C25.8517 72.6988 25.7042 73.1028 25.3478 73.26C25.0037 73.4119 24.5941 73.2548 24.4248 72.9313L23.8991 71.9325C23.7626 71.674 23.3748 71.674 23.2382 71.9325L22.7002 72.956C22.7002 72.956 22.6142 73.1171 22.4736 73.2041C22.3329 73.2911 22.2169 73.3197 22.0817 73.3197C21.9465 73.3197 21.8318 73.2911 21.6898 73.2041C21.5478 73.1171 21.4632 72.956 21.4632 72.956L20.9252 71.9325Z" fill="#D1D3D4"/>
+    <path d="M15.0678 63.9167C15.3263 63.7845 15.3263 63.4093 15.0678 63.2771L14.069 62.7684C13.7469 62.6045 13.5897 62.2081 13.7404 61.8751C13.8976 61.5302 14.3015 61.3889 14.6327 61.5567L17.285 62.9058C17.5539 63.0432 17.7175 63.3247 17.7032 63.6339C17.6902 63.9193 17.5136 64.1691 17.2629 64.2972L16.4394 64.7161C16.181 64.8482 16.181 65.2235 16.4394 65.3557L17.285 65.7864C17.5539 65.9239 17.7175 66.2053 17.7032 66.5145C17.6902 66.7999 17.5123 67.0497 17.2616 67.1779L14.6327 68.5151C14.3015 68.6842 13.8976 68.5415 13.7404 68.1966C13.5884 67.8637 13.7456 67.4672 14.069 67.3034L15.0678 66.7947C15.3263 66.6625 15.3263 66.2872 15.0678 66.1551L14.0443 65.6345C14.0443 65.6345 13.8833 65.5512 13.7963 65.4151C13.7092 65.279 13.6807 65.1667 13.6807 65.0359C13.6807 64.9051 13.7092 64.7941 13.7963 64.6566C13.8833 64.5192 14.0443 64.4373 14.0443 64.4373L15.0678 63.9167Z" fill="#D1D3D4"/>
+    <path d="M20.0177 55.4683C20.3367 55.4683 20.5954 55.2096 20.5954 54.8906C20.5954 54.5715 20.3367 54.3129 20.0177 54.3129C19.6986 54.3129 19.4399 54.5715 19.4399 54.8906C19.4399 55.2096 19.6986 55.4683 20.0177 55.4683Z" fill="#D1D3D4"/>
+    <path d="M24.0548 75.7658C24.3738 75.7658 24.6325 75.5071 24.6325 75.1881C24.6325 74.869 24.3738 74.6104 24.0548 74.6104C23.7357 74.6104 23.4771 74.869 23.4771 75.1881C23.4771 75.5071 23.7357 75.7658 24.0548 75.7658Z" fill="#D1D3D4"/>
+    <path d="M16.2882 57.0144C16.6072 57.0144 16.8659 56.7558 16.8659 56.4367C16.8659 56.1177 16.6072 55.859 16.2882 55.859C15.9691 55.859 15.7104 56.1177 15.7104 56.4367C15.7104 56.7558 15.9691 57.0144 16.2882 57.0144Z" fill="#D1D3D4"/>
+    <path d="M27.7847 74.2213C28.1038 74.2213 28.3625 73.9627 28.3625 73.6436C28.3625 73.3246 28.1038 73.0659 27.7847 73.0659C27.4657 73.0659 27.207 73.3246 27.207 73.6436C27.207 73.9627 27.4657 74.2213 27.7847 74.2213Z" fill="#D1D3D4"/>
+    <path d="M13.4332 59.8682C13.7522 59.8682 14.0109 59.6095 14.0109 59.2905C14.0109 58.9714 13.7522 58.7128 13.4332 58.7128C13.1141 58.7128 12.8555 58.9714 12.8555 59.2905C12.8555 59.6095 13.1141 59.8682 13.4332 59.8682Z" fill="#D1D3D4"/>
+    <path d="M30.6402 71.3661C30.9593 71.3661 31.2179 71.1075 31.2179 70.7884C31.2179 70.4693 30.9593 70.2107 30.6402 70.2107C30.3211 70.2107 30.0625 70.4693 30.0625 70.7884C30.0625 71.1075 30.3211 71.3661 30.6402 71.3661Z" fill="#D1D3D4"/>
+    <path d="M11.8883 63.5978C12.2073 63.5978 12.466 63.3392 12.466 63.0201C12.466 62.701 12.2073 62.4424 11.8883 62.4424C11.5692 62.4424 11.3105 62.701 11.3105 63.0201C11.3105 63.3392 11.5692 63.5978 11.8883 63.5978Z" fill="#D1D3D4"/>
+    <path d="M32.1846 67.6364C32.5037 67.6364 32.7624 67.3777 32.7624 67.0587C32.7624 66.7396 32.5037 66.481 32.1846 66.481C31.8656 66.481 31.6069 66.7396 31.6069 67.0587C31.6069 67.3777 31.8656 67.6364 32.1846 67.6364Z" fill="#D1D3D4"/>
+    <path d="M11.8883 67.635C12.2073 67.635 12.466 67.3764 12.466 67.0573C12.466 66.7383 12.2073 66.4796 11.8883 66.4796C11.5692 66.4796 11.3105 66.7383 11.3105 67.0573C11.3105 67.3764 11.5692 67.635 11.8883 67.635Z" fill="#D1D3D4"/>
+    <path d="M32.1861 63.5991C32.5052 63.5991 32.7638 63.3405 32.7638 63.0214C32.7638 62.7024 32.5052 62.4437 32.1861 62.4437C31.867 62.4437 31.6084 62.7024 31.6084 63.0214C31.6084 63.3405 31.867 63.5991 32.1861 63.5991Z" fill="#D1D3D4"/>
+    <path d="M13.4332 71.3661C13.7522 71.3661 14.0109 71.1075 14.0109 70.7884C14.0109 70.4693 13.7522 70.2107 13.4332 70.2107C13.1141 70.2107 12.8555 70.4693 12.8555 70.7884C12.8555 71.1075 13.1141 71.3661 13.4332 71.3661Z" fill="#D1D3D4"/>
+    <path d="M30.6402 59.8695C30.9593 59.8695 31.2179 59.6109 31.2179 59.2918C31.2179 58.9728 30.9593 58.7141 30.6402 58.7141C30.3211 58.7141 30.0625 58.9728 30.0625 59.2918C30.0625 59.6109 30.3211 59.8695 30.6402 59.8695Z" fill="#D1D3D4"/>
+    <path d="M16.2882 74.22C16.6072 74.22 16.8659 73.9613 16.8659 73.6423C16.8659 73.3232 16.6072 73.0646 16.2882 73.0646C15.9691 73.0646 15.7104 73.3232 15.7104 73.6423C15.7104 73.9613 15.9691 74.22 16.2882 74.22Z" fill="#D1D3D4"/>
+    <path d="M27.7862 57.0144C28.1053 57.0144 28.3639 56.7558 28.3639 56.4367C28.3639 56.1177 28.1053 55.859 27.7862 55.859C27.4671 55.859 27.2085 56.1177 27.2085 56.4367C27.2085 56.7558 27.4671 57.0144 27.7862 57.0144Z" fill="#D1D3D4"/>
+    <path d="M20.0177 75.7658C20.3367 75.7658 20.5954 75.5071 20.5954 75.1881C20.5954 74.869 20.3367 74.6104 20.0177 74.6104C19.6986 74.6104 19.4399 74.869 19.4399 75.1881C19.4399 75.5071 19.6986 75.7658 20.0177 75.7658Z" fill="#D1D3D4"/>
+    <path d="M24.0548 55.4683C24.3738 55.4683 24.6325 55.2096 24.6325 54.8906C24.6325 54.5715 24.3738 54.3129 24.0548 54.3129C23.7357 54.3129 23.4771 54.5715 23.4771 54.8906C23.4771 55.2096 23.7357 55.4683 24.0548 55.4683Z" fill="#D1D3D4"/>
+    <defs>
+    <clipPath id="clip0_122_6224">
+    <path d="M1 4H43V11.7035H1V4Z" fill="white"/>
+    </clipPath>
+    <clipPath id="clip1_122_6224">
+    <rect width="17.608" height="7.70348" fill="white" transform="translate(-8.26367 4)"/>
+    </clipPath>
+    <clipPath id="clip2_122_6224">
+    <rect width="17.608" height="7.70348" fill="white" transform="translate(13.1958 4)"/>
+    </clipPath>
+    <clipPath id="clip3_122_6224">
+    <rect width="17.608" height="7.70348" fill="white" transform="translate(34.6558 4)"/>
+    </clipPath>
+    </defs>
+</svg>
+    
+<!--*******************snippet => icon-bundle-quantity-minus.liquid for (-) pack items ****************-->
+<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M5.33333 8.5L12 8.5" stroke="#1B2625" stroke-linecap="round"/>
+</svg>
+
+<!--*******************snippet => icon-bundle-quantity-plus.liquid for (+) pack items ****************-->
+<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8.6665 11.8333V5.16663" stroke="#1D4945" stroke-linecap="round"/>
+  <path d="M5.33333 8.5L12 8.5" stroke="#1D4945" stroke-linecap="round"/>
+</svg>
+  
+<!-- *******************snippet => icon-bundle-remove.liquid ***************************************-->
+<svg width="36" height="35" viewBox="0 0 36 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M16.6665 11.75H19.6665C19.6665 11.3522 19.5085 10.9706 19.2272 10.6893C18.9459 10.408 18.5643 10.25 18.1665 10.25C17.7687 10.25 17.3871 10.408 17.1058 10.6893C16.8245 10.9706 16.6665 11.3522 16.6665 11.75ZM15.6665 11.75C15.6665 11.087 15.9299 10.4511 16.3987 9.98223C16.8676 9.51339 17.5035 9.25 18.1665 9.25C18.8295 9.25 19.4654 9.51339 19.9343 9.98223C20.4031 10.4511 20.6665 11.087 20.6665 11.75H25.6665C25.7991 11.75 25.9263 11.8027 26.0201 11.8964C26.1138 11.9902 26.1665 12.1174 26.1665 12.25C26.1665 12.3826 26.1138 12.5098 26.0201 12.6036C25.9263 12.6973 25.7991 12.75 25.6665 12.75H24.6125L23.4185 23.094C23.3341 23.8252 22.9838 24.4998 22.4344 24.9896C21.8849 25.4793 21.1746 25.7499 20.4385 25.75H15.8945C15.1585 25.7499 14.4481 25.4793 13.8986 24.9896C13.3492 24.4998 12.9989 23.8252 12.9145 23.094L11.7205 12.75H10.6665C10.5339 12.75 10.4067 12.6973 10.313 12.6036C10.2192 12.5098 10.1665 12.3826 10.1665 12.25C10.1665 12.1174 10.2192 11.9902 10.313 11.8964C10.4067 11.8027 10.5339 11.75 10.6665 11.75H15.6665ZM13.9075 22.98C13.9639 23.4674 14.1975 23.917 14.5639 24.2434C14.9303 24.5698 15.4039 24.7501 15.8945 24.75H20.4385C20.9292 24.7501 21.4027 24.5698 21.7691 24.2434C22.1355 23.917 22.3691 23.4674 22.4255 22.98L23.6055 12.75H12.7275L13.9075 22.98ZM16.6665 15.25C16.7991 15.25 16.9263 15.3027 17.0201 15.3964C17.1138 15.4902 17.1665 15.6174 17.1665 15.75V21.75C17.1665 21.8826 17.1138 22.0098 17.0201 22.1036C16.9263 22.1973 16.7991 22.25 16.6665 22.25C16.5339 22.25 16.4067 22.1973 16.313 22.1036C16.2192 22.0098 16.1665 21.8826 16.1665 21.75V15.75C16.1665 15.6174 16.2192 15.4902 16.313 15.3964C16.4067 15.3027 16.5339 15.25 16.6665 15.25ZM20.1665 15.75C20.1665 15.6174 20.1138 15.4902 20.0201 15.3964C19.9263 15.3027 19.7991 15.25 19.6665 15.25C19.5339 15.25 19.4067 15.3027 19.313 15.3964C19.2192 15.4902 19.1665 15.6174 19.1665 15.75V21.75C19.1665 21.8826 19.2192 22.0098 19.313 22.1036C19.4067 22.1973 19.5339 22.25 19.6665 22.25C19.7991 22.25 19.9263 22.1973 20.0201 22.1036C20.1138 22.0098 20.1665 21.8826 20.1665 21.75V15.75Z" fill="#1D4945"/>
+  <rect x="1.5015" y="0.835" width="33.33" height="33.33" rx="16.665" stroke="#1D4945" stroke-width="1.67"/>
+</svg>
+
+<!-- *************************Snippet=> icon-bundle-select.liquid****************************** -->
+<svg width="36" height="35" viewBox="0 0 36 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16.9995" y="26.6666" width="18.3333" height="1.66667" rx="0.833333" transform="rotate(-90 16.9995 26.6666)" fill="#1D4945"/>
+  <rect x="8.6665" y="16.6666" width="18.3333" height="1.66667" rx="0.833333" fill="#1D4945"/>
+  <rect x="1.16634" y="0.833333" width="33.3333" height="33.3333" rx="16.6667" stroke="#1D4945" stroke-width="1.66667"/>
+</svg>    
+
+<!-- **********  Assests => bundle-collection.css ***************** -->
+.card__content.card__lower_content {
+  display: none !important;
+}
+.bundle-selection-box img {
+  width: 100%;
+}
+.bundle-collection {
+display: flex;
+column-gap: var(--grid-desktop-horizontal-spacing);
+align-items: flex-start;
+position: relative;
+}
+.bundle-collection::after {
+  content: "Loading components";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10% 0 0;
+  color: #000;
+  font-size: 16px;
+  position: absolute;
+}
+.bundle-collection.loaded::after {
+  display: none;
+}
+.bundle-collection .page-width,
+.bundle-collection #ProductGridContainer .collection.page-width {
+padding: 0;
+}
+.bundle-collection hr.separate {
+width: 100%;
+}
+.bundle-collection-content {
+width: 75%;
+}
+.bundle-collection-summary {
+width: 25%;
+min-width: 335px;
+padding: 20px;
+position: sticky;
+background-color: #f0f2f1;
+top: 100px;
+}
+
+@media (max-width: 769px) {
+  .collection-hero__text-wrapper .collection-hero__title {
+      display: none;
+  }
+  .bundle-collection {
+      flex-wrap: wrap;
+      margin-top: 100px;
+  }
+  .bundle-collection-content {
+      width: 100%;
+      order: 1;
+  }
+  .bundle-collection-summary {
+      width: 100%;
+      order: 0;
+      background: none;
+      position: relative;
+      padding: 0;
+      min-width: unset;
+      top: 0;
+  }
+}
+
+.bundle-collection-summary h2 {
+font-family: "Montserrat";
+font-weight: 400;
+font-size: 23px;
+letter-spacing: -0.01em;
+color: #1b2625;
+margin: 0 0 20px;
+}
+.bundle-collection-summary h3 {
+font-family: "Montserrat";
+font-weight: 600;
+font-size: 11px;
+line-height: 13px;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+color: #1b2625;
+margin: 0 0 2px;
+}
+.bundle-collection-summary p {
+font-family: "Montserrat";
+font-weight: 500;
+font-size: 12px;
+line-height: 17px;
+color: #77807f;
+margin: 0;
+}
+.bundle-collection .bundle-description {
+margin: 0 0 40px;
+}
+.bundle-collection .bundle-quantity-selector {
+margin: 0 0 40px;
+position: relative;
+}
+.bundle-quantities {
+display: flex;
+column-gap: 10px;
+}
+.bundle-quantities .bundle-quantity-box {
+flex: 1;
+text-align: center;
+cursor: pointer;
+}
+.bundle-quantities .bundle-quantity-box p.bundle-quantity-discount {
+padding: 1px 6px 2px;
+width: 65px;
+border-radius: 35px;
+font-family: "Montserrat";
+font-weight: 500;
+font-size: 9px;
+line-height: 13px;
+letter-spacing: 0.07em;
+text-transform: uppercase;
+color: #1b2625;
+display: inline-block;
+margin: 0 auto 4px;
+}
+.bundle-quantities .bundle-quantity-box.selected p.bundle-quantity-discount {
+background: #f8cd56;
+}
+.bundle-quantities .bundle-quantity-box p.bundle-quantity-label {
+  padding: 6px 5px;
+  border: 2px #1D4945 solid;
+  border-radius: 75px;
+  font-family: 'Montserrat';
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1C1C1C;
+}
+.bundle-quantities .bundle-quantity-box.selected p.bundle-quantity-label {
+  color: #FFFFFF;
+  background: #1D4945;
+}
+.bundle-selection {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+}
+.bundle-selection-box {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.bundle-selection-sticky .icon-bundle-bottle {
+  width: 18px;
+  height: 42px;
+}
+.bundle-selection[data-bundle-components="3"] .bundle-selection-box:last-child {
+  display: none;
+}
+.bundle-selection[data-bundle-components="2"] .bundle-selection-box:last-child,
+.bundle-selection[data-bundle-components="2"] .bundle-selection-box:nth-child(3) {
+  display: none;
+}
+
+.bundle-totals {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: 'Montserrat';
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: #000000;
+}
+.bundle-totals .bundle-subtotal-cost {
+  font-weight: bold;
+  color: #1B2625;
+  font-size: 15px;
+}
+.bundle-totals .bundle-subtotal-cost .original-cost {
+  text-decoration: line-through;
+  color: #ADADAD;
+}
+
+.bundle-atc a {
+  padding: 12px 24px;
+  background: #1D4945;
+  border-radius: 24px;
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #FFFFFF;
+  text-decoration: none;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+}
+.bundle-atc a[disabled] {
+  background-color: #C2C2C2;
+}
+
+.card__information.bundle-component {
+  display: flex;
+}
+.bundle-component-description {
+  flex: 1;
+}
+.bundle-component-description-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.bundle-component-description .card__heading {
+font-family: 'Montserrat';
+font-weight: 600;
+font-size: 15px;
+line-height: 19px;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+color: #1B2625;
+}
+.bundle-component-description .card-information .shortDescription,
+.bundle-component-description .card-information .shortDescription p {
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 19px;
+color: #77807F;
+}
+.collection .card__content .bundle-component-description .card-information .price__container {
+  font-size: 11px;
+}
+.bundle-component-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+@media (max-width: 769px) {
+  .card__information.bundle-component {
+      display: block;
+  }
+  .bundle-component-description {
+      flex: auto;
+      width: 100%;
+  }
+  .bundle-component-actions {
+      flex: auto;
+      width: auto;
+  }
+}
+
+.bundle-footer-fixed {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background: #F4FAFA;
+  box-shadow: -3px 0px 4px rgba(0, 0, 0, 0.25);
+  padding: 10px;
+}
+.bundle-footer-fixed .bundle-totals {    
+  font-size: 11.5px;
+  line-height: 13px;    
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.bundle-footer-fixed .bundle-totals .bundle-subtotal-cost {
+  font-size: 11.5px;
+  font-weight: inherit;
+}
+.bundle-footer-fixed .bundle-selection-box {
+  height: 47px;
+}
+.bundle-footer-fixed .bundle-selection-box img {
+  height: 47px;
+}
+
+
+.bundle-selection-atc {
+  display: flex;
+  width: 100%;
+}
+.bundle-selection-atc .bundle-selection {
+  width: 50%;
+  margin: 0;
+}
+.bundle-selection-atc .bundle-atc {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.bundle-selection-atc .bundle-atc a {
+  max-width: 130px;
+  padding: 12px 0;
+}
+.bundle-selection-atc .bundle-atc svg.bundle-go-up {
+  cursor: pointer;
+  margin-right: 10px;
+}
+.bundle-component-select {
+  font-size: 0;
+}
+.bundle-component-actions.selected .bundle-component-select {
+  display: none;
+}
+.bundle-component-quantity {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+}
+.bundle-component-actions.selected .bundle-component-quantity {
+  display: flex;
+}
+.bundle-component-remove {
+  font-size: 0;
+  margin-right: 10px;
+}
+.bundle-component-quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px #1D4945 solid;
+  border-radius: 80px;
+  width: 85px;
+  height: 35px;
+}
+.bundle-component-quantity-selector button,
+.bundle-component-quantity-selector input {
+  flex: 1;
+  background-color: transparent;
+  border: 0;
+  width: calc(100%/3);
+  text-align: center;
+}
+.bundle-component-quantity-selector button {
+  font-size: 0;
+  cursor: pointer;
+}
+.bundle-component-quantity-selector button.disabled {
+  pointer-events: none;
+  opacity: .3;
+}
+.bundle-component-quantity-selector input {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 19px;
+  align-items: center;
+  text-align: center;
+  color: #1B2625;
+}
+.bundle-component-quantity-selector input,
+.bundle-component-quantity-selector input:hover,
+.bundle-component-quantity-selector input:focus,
+.bundle-component-quantity-selector input:active {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+.bundle-component-quantity-selector input::-webkit-outer-spin-button,
+.bundle-component-quantity-selector input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.bundle-component-quantity-selector input[type=number] {
+-moz-appearance: textfield;
+}
+.bundle-limit {
+  display: none;
+  font-size: 10px;
+  margin: 5px 0 0;
+  position: absolute;
+  bottom: -25px;
+}
+.bundle-limit.show {
+  display: block;
+}
+.bundle-shoppay {
+  margin: 15px 0;
+  text-align: center;
+}
+
+@media (max-width: 769px) {
+  .bundle-component-description .card__heading {
+      font-size: 13px;
+      line-height: 16px;
+  }
+  .bundle-component-description .card-information .shortDescription,
+  .bundle-component-description .card-information .shortDescription p {
+      font-size: 11px;
+      line-height: 18px;
+  }
+  .bundle-component-description {
+      margin-bottom: -17px;
+  }
+  .bundle-component-select svg,
+  .bundle-component-remove svg {
+      width: 23px;
+      height: 23px;
+  }
+  .bundle-component-remove {
+      margin-right: 7px;
+  }
+  .bundle-component-quantity-selector {
+      height: 23px;
+      width: 80px;
+  }
+  .bundle-component-quantity-selector input {
+      font-size: 14px;
+  }
+}
