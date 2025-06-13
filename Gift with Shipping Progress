@@ -267,3 +267,50 @@
         "label": "Second Gift Product Target Amount",
         "default":"500"
       },
+
+
+/////////////////////*******************use can use this method also ***********************************
+gift product new code
+
+<script>
+  $(document).ready(function(){
+    {% if cart.total_price > 10000 %}
+    cart();
+    {% endif %}
+  });
+  function cart(){
+     alert("test");
+    myVar = setTimeout(function(){ 
+    jQuery.getJSON('/cart.js', function(cartData) {
+     var data = cartData.total_price;
+      var  existid = {{variant_id}};
+      var exist = 0;
+      for (let i = 0; i < cartData.items.length; i++) {
+        var itemvid = cartData.items[i]['id'];
+        if(itemvid == existid ){
+          exist = 1;
+      
+          if(cartData.items.length < 1){
+            alert(cartData.items.length);
+            clearTimeout(myVar);
+          }
+
+        }
+        
+      }
+    if(data > 1000){
+      if(exist == 0){
+        //alert("1");
+        window.location.href= '/cart/add?quantity=1&id={{variant_id}}';
+      }
+    }else{
+      if(exist == 1){
+        // alert("0");
+        window.location.href= '/cart/change?quantity=0&id={{variant_id}}';
+      }
+    } 
+     
+    });
+  }, 3000);
+  }
+</script>
