@@ -1,0 +1,102 @@
+<!-- Google Map api location get automatically to input fields -->
+<!-- Reference store => https://modara.com.au/products/design-your-echo-v4 -->
+
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB58le5CbTIa5lbYZnHpuEYweXhNDcssss&libraries=maps,marker,places&callback=initMap">
+</script>
+                            
+ <!-- <script
+    async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB58le5CbTIa5lbYZnHpuEYweXhNDcLoXs&libraries=places&callback=initMap">
+  </script> -->
+
+  <script>
+let map;
+let marker;
+let autocomplete;
+
+function initMap() {
+  const defaultAddress = "Perth, WA";
+  const defaultLocation = { lat: 30.266666, lng: -97.73333 };
+  const mapElement = document.getElementById("map");
+  const input = document.getElementById("autocomplete");
+
+  map = new google.maps.Map(mapElement, {
+    center: defaultLocation,
+    zoom: 8,
+  });
+
+  autocomplete = new google.maps.places.Autocomplete(input, {
+    types: ["geocode"],
+  });
+
+  autocomplete.addListener("place_changed", handlePlaceChange);
+
+  // Check if input has a value, else set default and geocode it
+  if (input.value.trim()) {
+    geocodeAddress(input.value);
+    console.log("Yes, input has address:", input.value);
+  } else {
+    input.value = defaultAddress;
+    geocodeAddress(defaultAddress);
+    console.log("No address entered. Using default:", defaultAddress);
+  }
+}
+
+function handlePlaceChange() {
+  const place = autocomplete.getPlace();
+
+  if (!place.geometry) return;
+
+  map.setCenter(place.geometry.location);
+  map.setZoom(15);
+
+  placeMarker(place.geometry.location);
+  fillAddressFields(place);
+}
+
+function placeMarker(location) {
+  if (marker) marker.setMap(null);
+  marker = new google.maps.Marker({
+    position: location,
+    map: map,
+  });
+}
+
+function fillAddressFields(place) {
+  let zip = "";
+  let city = "";
+
+  if (place.address_components) {
+    for (const component of place.address_components) {
+      if (component.types.includes("postal_code")) zip = component.long_name;
+      if (component.types.includes("locality")) city = component.long_name;
+    }
+  }
+
+  $('[name="contact[Zip Code]"]').val(zip);
+  $('[name="contact[City]"]').val(city);
+  console.log("ZIP:", zip);
+  console.log("City:", city);
+  $(".form_2_continue_btn").prop("disabled", false);
+
+}
+
+function geocodeAddress(address) {
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ address: address }, (results, status) => {
+    if (status === "OK") {
+      const place = results[0];
+      map.setCenter(place.geometry.location);
+      map.setZoom(15);
+      placeMarker(place.geometry.location);
+      fillAddressFields(place);
+    } else {
+      console.warn("Geocode failed: " + status);
+    }
+  });
+}
+
+</script>
