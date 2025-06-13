@@ -1,0 +1,269 @@
+
+   
+   <!-- js keep in theme.lquid -->
+   {% assign free_shipping_amount = settings.free_shipping_amount %} 
+    {% capture currencyString %}{{ shop.money_format }}{% endcapture %}
+    {% assign tempArray = currencyString | split: '{' %}
+    {% assign currencySymbol = tempArray.first %}
+    {% if free_shipping_amount != blank %}
+    <script>
+     freeshipping();
+       setInterval(function() {
+       freeshipping();//window.freeshipping();
+     }, 1000);
+   function freeshipping() {
+      var freeShippingAmount = {{free_shipping_amount}};
+      var firstGiftTarget = 399 * 100;
+      var secondGiftTarget = 500 * 100;
+      var freeShippingTarget = {{free_shipping_amount}} * 100;
+      var firstGiftProductId =  {{ settings.firstGiftProductId.selected_or_first_available_variant.id }};
+      var secondGiftProductId = {{ settings.secondGiftProductId.selected_or_first_available_variant.id }};
+
+  $.ajax({
+    type: 'GET',
+    url: '/cart.js',
+    dataType: 'json',
+    success: function (cart) {
+      var cartTotal = cart.total_price;
+      var cartItems = cart.items;
+      var allVariantIds = cartItems.map(item => item.variant_id);
+      const giftIds = [firstGiftProductId, secondGiftProductId];
+
+      let firstGiftInCart = allVariantIds.includes(firstGiftProductId);
+      let secondGiftInCart = allVariantIds.includes(secondGiftProductId);
+
+      const onlyGiftsInCart = cartItems.length > 0 && cartItems.every(item => giftIds.includes(item.variant_id));
+
+      // 🔁 Remove gift items if only gifts exist
+      if (onlyGiftsInCart) {
+        let updates = {};
+        cartItems.forEach(item => {
+          if (giftIds.includes(item.variant_id)) {
+            updates[item.variant_id] = 0;
+          }
+        });
+
+        fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates })
+        })
+        .then(() => freeshipping());
+        return;
+      }
+
+      // 🗑 Remove gifts if thresholds not met
+      let updatesToRemove = {};
+      if (firstGiftInCart && cartTotal < firstGiftTarget) {
+        updatesToRemove[firstGiftProductId] = 0;
+      }
+      if (secondGiftInCart && cartTotal < secondGiftTarget) {
+        updatesToRemove[secondGiftProductId] = 0;
+      }
+
+      if (Object.keys(updatesToRemove).length > 0) {
+        fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates: updatesToRemove })
+        })
+        .then(() => freeshipping());
+        return;
+      }
+
+      // 🎁 Ensure quantity = 1 if gift is already in cart
+      function ensureGiftQty(productId) {
+        const item = cartItems.find(item => item.variant_id === productId);
+        if (item && item.quantity > 1) {
+          let updates = {};
+          updates[productId] = 1;
+          fetch('/cart/update.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ updates })
+          });
+        }
+      }
+
+      // ➕ Add gift if not in cart
+      function addGiftIfNeeded(productId, isInCart) {
+        if (!isInCart) {
+          $.ajax({
+            type: 'POST',
+            url: '/cart/add.js',
+            data: { id: productId, quantity: 1 },
+            dataType: 'json',
+            success: function () {
+              ensureGiftQty(productId);
+              freeshipping();
+            }
+          });
+        } else {
+          ensureGiftQty(productId);
+        }
+      }
+
+      // function refresh(){
+      //   setTimeout(function(){window.location.replace("{{ shop.url }}/cart");},400);
+      // }
+
+      // 💬 Build UI messages
+      // $(".cart-shipping__wrapper").show();
+      // $(".message_js").empty();
+      let messages = "";
+
+      // 🎁 First Gift
+      if (cartTotal >= firstGiftTarget) {
+        addGiftIfNeeded(firstGiftProductId, firstGiftInCart);
+      
+        messages += `<p class="cart-gift__success">🎁 You’ve unlocked your first free gift!</p>`;
+      } else {
+        const amountLeft = ((firstGiftTarget - cartTotal) / 100).toFixed(2);
+       
+       messages += `<p class="cart-gift__progress">🎁 Spend {{ currencySymbol }}${amountLeft} more to unlock your first free gift!</p>`;
+      }
+
+      // 🚚 Free Shipping
+      if (cartTotal >= freeShippingTarget) {
+      
+        messages += `<p class="cart-shipping__success">🎉 Free Shipping unlocked!</p>`;
+      } else {
+        
+        const amountLeft = ((freeShippingTarget - cartTotal) / 100).toFixed(2);
+        messages += `<p class="cart-shipping__progress">🚚 Spend $${amountLeft} more for Free Shipping!</p>`;
+      }
+      let secondGiftAddedOnce = false; // Global flag
+
+      // 🎁 Second Gift
+      if (cartTotal >= secondGiftTarget) {
+        addGiftIfNeeded(secondGiftProductId, secondGiftInCart);
+        if (secondGiftAddedOnce == true) {
+        console.log("second gift");
+          setTimeout(function(){
+           // refresh();
+             secondGiftAddedOnce = true;
+          }, 100);
+         messages += `<p class="cart-gift__success">🎁 You’ve unlocked Free Shipping and 2 Free Gifts! They’ll be automatically added to your cart.</p>`;
+        }
+      } else if (cartTotal >= freeShippingTarget) {
+        secondGiftAddedOnce = false;
+        const amountLeft = ((secondGiftTarget - cartTotal) / 100).toFixed(2);
+        messages += `<p class="cart-gift__progress">🎁 Add {{ currencySymbol }}${amountLeft} more to get your second free gift!</p>`;
+      }
+
+     // $(".message_js").html(messages);
+
+      // 🔄 Update progress bar
+      const progressPercent = Math.min(100, Math.round((cartTotal / secondGiftTarget) * 100));
+      $("span.cart-shippingThreshold__progress").css("width", progressPercent + "%");
+          //setTimeout(function(){window.location.replace("{{ shop.url }}/cart");},400);
+    }
+  });
+}
+
+</script>
+{% endif %}
+
+//////////////////////*********************main-cart-item.liquid file******************////////////
+
+{% assign free_shipping_amount = settings.free_shipping_amount | plus: 0 %}
+{% assign first_gift_amount = 399 %}
+{% assign second_gift_amount = 500 %}
+
+{% assign cart_total = cart.total_price | divided_by: 100.0 %}
+{% assign first_gift_diff = first_gift_amount | minus: cart_total %}
+{% assign shipping_diff = free_shipping_amount | minus: cart_total %}
+{% assign second_gift_diff = second_gift_amount | minus: cart_total %}
+{% capture currencyString %}{{ shop.money_format }}{% endcapture %}
+{% assign tempArray = currencyString | split: '{' %}
+{% assign currencySymbol = tempArray.first %}
+{% assign refresh = false %}
+
+{% unless cart == empty %}
+  {% assign refresh = true %}
+   <div class="cart-shipping__wrapper">
+  <div class="message_js">
+    {% if cart_total >= second_gift_amount %}
+      <p class="cart-gift__success">🎁 You’ve unlocked Free Shipping and 2 Free Gifts! They’ll be automatically added to your cart.</p>
+      {% assign refresh = true %}
+    {% elsif cart_total >= free_shipping_amount %}
+      {% if cart_total >= first_gift_amount %}
+        <p class="cart-gift__success">🎁 You’ve unlocked your first free gift!</p>
+        <p class="cart-shipping__success">🎉 Free Shipping unlocked!</p>
+        <p class="cart-gift__progress">🎁 Add {{ currencySymbol }}{{ second_gift_diff | round: 2 }} more to get your second free gift!</p>
+      {% else %}
+        <p class="cart-shipping__success">🎉 Free Shipping unlocked!</p>
+        <p class="cart-gift__progress">🎁 Spend {{ currencySymbol }}{{ first_gift_diff | round: 2 }} more to unlock your first free gift!</p>
+      {% endif %}
+    {% elsif cart_total >= first_gift_amount %}
+      <p class="cart-gift__success">🎁 You’ve unlocked your first free gift!</p>
+      <p class="cart-shipping__progress">🚚 Spend {{ currencySymbol }}{{ shipping_diff | round: 2 }} more for Free Shipping!</p>
+      <p class="cart-gift__progress">🎁 Add {{ currencySymbol }}{{ second_gift_diff | round: 2 }} more to get your second free gift!</p>
+    {% else %}
+      <p class="cart-gift__progress">🎁 Spend {{ currencySymbol }}{{ first_gift_diff | round: 2 }} more to unlock your first free gift!</p>
+      <p class="cart-shipping__progress">🚚 Spend {{ currencySymbol }}{{ shipping_diff | round: 2 }} more for Free Shipping!</p>
+    {% endif %}
+  </div>
+
+  {% assign progress_percent = cart.total_price | times: 100 | divided_by: 50000 %}
+  <div class="cart-shippingThreshold__bar">
+    <span class="cart-shippingThreshold__progress" style="width: {{ progress_percent | at_most: 100 }}%;"></span>
+  </div>
+</div>
+  {% endunless %}
+ 
+ {% comment %}   <!-- Free shipping progress markup by js ajax-->
+      {% assign free_shipping_amount = settings.free_shipping_amount %} 
+      {% if free_shipping_amount != blank %}
+      <div class="cart-shipping__wrapper">
+      <div class="message_js">  
+     
+      </div>  
+      <div class="cart-shippingThreshold__bar">
+      <span class="cart-shippingThreshold__progress"></span>
+      </div>
+      </div>
+      {% endif %}
+    {% endcomment %}
+
+
+
+    //////////////////////////********Trigger function by using following function***********/////////////////////////////
+<script>
+  $(document).ready(function(){
+     {% if refresh == true %}
+        setTimeout(function(){ window.freeshipping();  },1200);
+     {% endif %}
+  }); 
+</script>
+
+////////////////////////********schema.liquid*******************************
+
+{
+        "type": "text",
+        "id": "free_shipping_amount",
+        "label": "Free Shipping Amount",
+        "default": "450"
+      },
+      {
+        "type": "product",
+        "id": "firstGiftProductId",
+        "label": "First Gift Product"
+      },
+      {
+        "type": "text",
+        "id": "firstGiftTarget",
+        "label": "First Gift Product Target Amount",
+        "default":"399"
+      },
+      {
+        "type": "product",
+        "id": "secondGiftProductId",
+        "label": "Second Gift Product"
+      },
+      {
+        "type": "text",
+        "id": "secondGiftTarget",
+        "label": "Second Gift Product Target Amount",
+        "default":"500"
+      },
