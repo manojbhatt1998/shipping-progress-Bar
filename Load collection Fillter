@@ -1,0 +1,180 @@
+Load collection Fillter
+
+<script>
+//custom Filters on the collection page
+Shopify.queryParams = {};
+if (location.search.length) {
+for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) { aKeyValue = aCouples[i].split('='); if (aKeyValue.length > 1) {
+Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+}
+}
+}
+
+jQuery('#SortBy')
+.val('{{ collection.sort_by | default: collection.default_sort_by }}')
+.bind('change', function () {
+Shopify.queryParams.sort_by = jQuery(this).val();
+location.search = jQuery.param(Shopify.queryParams);
+}
+);
+
+jQuery(".accordion_head").click(function () {
+if (jQuery('.accordion_body').is(':visible')) {
+jQuery(".accordion_body").slideUp(300);
+jQuery(".plusminus").text('+');
+}
+if (jQuery(this).next(".accordion_body").is(':visible')) {
+jQuery(this).removeClass('show');
+jQuery(this).addClass('close');
+jQuery(this).next(".accordion_body").removeClass('show');
+jQuery(this).next(".accordion_body").addClass('close');
+jQuery(this).next(".accordion_body").slideUp(300);
+jQuery(this).children(".plusminus").text('+');
+} else {
+jQuery(this).removeClass('close');
+jQuery(this).addClass('show');
+jQuery(this).next(".accordion_body").slideDown(300);
+jQuery(this).next(".accordion_body").removeClass('close');
+jQuery(this).next(".accordion_body").addClass('show');
+jQuery(this).children(".plusminus").text('-');
+}
+});
+jQuery('.accordion_head').trigger('click');
+</script>
+//////////////////////////////////////////////////css//////////////////////////////
+.accordion_head {
+background-color: transparent;
+color: #333;
+cursor: pointer;
+font-family: arial;
+font-size: 14px;
+margin: 0 auto;
+padding: 7px 11px;
+font-weight: bold;
+width: 100%;
+display: inline-block;
+max-width: 1280px;
+text-align: center;
+}
+.plusminus {
+float: none;
+}
+.accordion_body {
+border-top: 1px solid #eaeaea;
+border-bottom: 1px solid #eaeaea;
+display: inline-block;
+width: 100%;
+max-width: 1280px;
+margin: 0 auto 20px auto;
+}
+.accordion_body ul {
+margin: 15px 0;
+text-align: center;
+}
+.accordion_body ul li {
+display: inline;
+padding: 0 10px;
+}
+.accordion_body ul li.active {
+font-weight: bold;
+}
+.accordion_head.close {
+margin: 0 auto;
+display: table;
+}
+.filters-toolbar-wrapper {
+display: none;
+}
+///////////////////////////////////////////////////////////////collection.temp////////////////
+
+<div class="clearfix filter">
+<p>Browse by tag:</p>
+<select class="coll-filter">
+<option value="">All</option>
+{% for tag in collection.all_tags %}
+{% if current_tags contains tag %}
+<option value="{{ tag | handle }}" selected>{{ tag }}</option>
+{% else %}
+<option value="{{ tag | handle }}">{{ tag }}</option>
+{% endif %}
+{% endfor %}
+</select>
+</div>
+
+{% if collection.all_types.size != 1 %}
+<div class="accordion_head"> Type <span class="plusminus">+</span>
+</div>
+<div class="accordion_body" style="display: none;">
+<ul> {% for type in collection.all_types %}
+{% for tag in type %}
+{% if current_tags contains tag %}
+<li class="active" data-tag="{{tag | handleize}}">{{ tag | append: '<span class="x">×</span>' | link_to_remove_tag: tag }}</li>
+{% else %}
+<li data-tag="{{tag | handleize}}">{{ tag | link_to_add_tag: tag }}</li>
+{% endif %} {% endfor %} {% endfor %}
+</ul>
+</div>
+{% endif %}
+<!--COLORS CODE -->
+{% if collection.all_tags.size != 1 %}
+<div class="accordion_head">Colors <span class="plusminus">+</span>
+</div>
+<div class="accordion_body" style="display: none;">
+<ul>{% for tag in collection.all_tags %}
+{% if tag contains 'color' %}
+{% if current_tags contains tag %}
+<li class="active" data-tag="{{ tag | handleize}}">{{ tag | append: '<span class="x">×</span>' | link_to_remove_tag: tag }}</li>
+{% else %}
+<!--<li data-tag="{{ tag| handleize}}"> {{tag|remove:'color-'|link_to_add_tag: tag }}</li> -->
+{% assign tag1 = tag | downcase | split : 'color-' %}
+<li> <a href="{{ tag| handleize}}"> {{tag|remove:'color-'|link_to_add_tag: tag }}</a></li>
+<button style="background-color:{{tag1}};background-image: url({{tag|remove:'color-'|append:'.png'|asset_url}}" id="color-images"></button>
+<!--<button onclick="window.location.href='{{ canonical_url }}/{{tag}}'" style="background-color:{{tag1}};background-image: url({{tag|remove:'color-'|append:'.png'|asset_url}}" id="color-images"></button> -->
+{% endif %}
+{% endif %}
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+<!--END COLORS CODE -->
+
+<!-- SIZE CODE -->
+{% if collection.all_tags.size != 1 %}
+<div class="accordion_head">Sizes <span class="plusminus">+</span>
+</div>
+<div class="accordion_body" style="display: none;">
+<ul>{% for tag in collection.all_tags %}
+{%assign tagsize = tag |downcase%}
+{% if tagsize contains 'size' %}
+{%assign tagsizecapt = tagsize |remove:'size-'%}
+{% if current_tags contains tag %}
+<li class="active" data-tag="{{ tagsizecapt | handleize}}">{{ tagsizecapt | append: '<span class="x">×</span>' | link_to_remove_tag: tag }}</li>
+{% else %}
+<li> <a href="{{ tagsizecapt| handleize}}"> {{tagsizecapt|link_to_add_tag: tag }}</a></li>
+{% endif %}
+{% endif %}
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+<!--END SIZE CODE -->
+<!--Price Range -->
+{% if collection.all_tags.size != 1 %}
+<div class="accordion_head">Range Price <span class="plusminus">+</span>
+</div>
+<div class="accordion_body" style="display: none;">
+<ul>{% for tag in collection.all_tags %}
+{%assign tagsize = tag |downcase%}
+{% if tagsize contains 'range_' %}
+{%assign tagsizecapt = tagsize |remove:'range_'%}
+{% if current_tags contains tag %}
+<li class="active" data-tag="{{ tagsizecapt | handleize}}">{{ tagsizecapt | append: '<span class="x">×</span>' | link_to_remove_tag: tag }}</li>
+{% else %}
+<li> <a href="{{ tagsizecapt| handleize}}"> {{tagsizecapt|link_to_add_tag: tag }}</a></li>
+{% endif %}
+{% endif %}
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+<!-- End Price Range -->
