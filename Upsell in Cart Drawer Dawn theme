@@ -1,0 +1,104 @@
+{% assign upsell_show = false %}
+{% if settings.upsell_product_1 != blank or settings.upsell_product_2 != blank %}
+  {% assign upsell_show = true %}
+  {% assign upsell_product_1 = settings.upsell_product_1 %}
+  {% assign upsell_product_2 = settings.upsell_product_2 %}
+{% endif %}
+
+{% if upsell_show == true %}  
+   {% assign total_quantity = 0 %}
+   {%- for item in cart.items -%}
+    {% assign all_product_ids = '' %}
+    {% assign total_quantity = total_quantity | plus: item.quantity %}
+
+{% for item in cart.items %}
+  {% assign all_product_ids = all_product_ids | append: item.product.id | append: ',' %}
+{% endfor %}
+
+{% assign show_upsell_div = false %}
+{% assign hide_upsell_first = false %}
+{% assign hide_upsell_second = false %}
+{% if all_product_ids contains upsell_product_1.id and all_product_ids contains upsell_product_2.id %}
+  {% assign show_upsell_div = true %}
+{% endif %}
+   {% comment %}  total_quantity--{{total_quantity}}
+     all_product_ids==>{{all_product_ids}}
+     show_upsell_div ===> {{ show_upsell_div }}   
+     {% endcomment %}
+   
+     {% if all_product_ids contains upsell_product_1.id  %}
+       {% assign hide_upsell_first = true %}
+      {% endif %}
+     
+       {% if all_product_ids contains upsell_product_2.id  %}
+        {% assign hide_upsell_second = true %}
+      {% endif %}
+     
+  {% endfor %}
+  {% endif %}
+
+<style>
+{% if upsell_show == true %}  
+
+  .drawer.active {
+    overflow: scroll !important;
+}
+  .drawer__inner{
+    height:auto !important;
+    overflow:scroll;
+  }
+.upsell_products .loft_product_card {
+    width: 100%;
+}
+.upsell_products .card {
+    flex-direction: unset !important;
+    align-items: center;
+    gap: 20px;
+}
+.upsell_products .card__content{
+  display:none !important;
+}
+.upsell_products .product__info-container {
+    width: 100%;
+    max-width: 100%;
+}
+.upsell_products .product-form__submit {
+    margin: 0 !important;
+    padding: 10px 20px;
+    border-radius: 40px;
+    margin-bottom: 1rem;
+    background: #000;
+    color: #fff;
+} 
+ {% endif %} 
+  .drawer {
+    visibility: hidden;
+  }
+</style>
+
+//*****************keep after mains items li table ****************//
+  {%- if cart != empty or upsell_product_1 != blank or upsell_product_2 != blank  -%}
+       <div class="upsell_products show_upsell--{{ show_upsell_div }} {% if show_upsell_div == true %} hidden {% endif %}">
+        {% if settings.upsell_heading != blank %} <h2 class="upsell_heading h2 center">{{ settings.upsell_heading|default:"Do you want to add this?" }}</h2>{% endif %}
+        <div class="upsell_item_one {% if hide_upsell_first == true %} hidden {% endif %}" id="items-{{upsell_product_1.id }}">
+         {% render 'card-product',
+          card_product: upsell_product_1,
+          media_aspect_ratio: settings.image_ratio,
+          image_shape: section.settings.image_shape,
+          lazy_load: true,
+          upsell_add_cart:true,
+          section_id: section.id
+          %}
+        </div>
+        <div class="upsell_item_two  {% if hide_upsell_second == true %} hidden {% endif %}" id="items-{{upsell_product_2.id }}">
+         {% render 'card-product',
+          card_product: upsell_product_2,
+          media_aspect_ratio: settings.image_ratio,
+          image_shape: section.settings.image_shape,
+          lazy_load: true,
+          upsell_add_cart:true,
+          section_id: section.id
+          %}
+        </div>
+       </div>
+      {% endif %}
