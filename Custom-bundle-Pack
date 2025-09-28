@@ -1,0 +1,344 @@
+screenshot => https://tinyurl.com/26cgmcns
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundle App</title>
+</head>
+<style>
+    .bundle-products-list {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: repeat(3, auto);
+        background-color: #2196F3;
+        padding: 10px;
+    }
+    img {
+    width: 100%;
+}
+.bundle-products-main {
+    display: flex;
+    gap: 20px;
+    align-items: start;
+    justify-content: center;
+}
+.bundle-selection-box img {
+    width: 100px;
+}
+.bundle-selection.bundle-selection-normal {
+    display: flex;
+    gap: 10px;
+}
+.icon-bundle-bottle {
+    background-color: #cecece;
+    width: 100px;
+    height: 100px;
+    background-image: url("https://bhattmanoj97.myshopify.com/cdn/shopifycloud/storefront/assets/no-image-2048-a2addb12.gif");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    border: 1px solid #000;
+}
+.bundle-selection-box img {
+    object-fit: fill;
+    height: 100px;
+    width: 100px;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.bundle-component-quantity-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px #1D4945 solid;
+    border-radius: 80px;
+    width:25%;
+    height: 35px;
+}
+.bundle-component-quantity {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    gap: 10px;
+}
+.bundle-component-quantity-selector button, .bundle-component-quantity-selector input {
+    flex: 1;
+    background-color: transparent;
+    border: 0;
+    width: calc(100%/3);
+    text-align: center;
+}
+input[type="number"] {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 19px;
+    align-items: center;
+    text-align: center;
+    color: #1b2625;
+    border: none;
+    width: 30px;
+    outline: none;
+}
+.bundle-component-quantity-selector {
+    display: flex;
+}
+a.bundle-component-remove {
+    width: 10%;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+.product-title {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+.proudct-price {
+    margin-top: 10px;
+}
+.total-price {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+</style>
+
+<body>
+    <div class="bundle-main">
+          <div class="bundle-products-main">
+        <div class="bundle-products-container">
+            <div class="bundle-products-header">
+                <h2>Choose Your Bundle Products</h2>
+            </div>
+            <div class="bundle-products-list">
+                <div class="bundle-product-item">
+                    <img src="https://bhattmanoj97.myshopify.com/cdn/shop/products/bedroom-bed-with-brown-throw-pillows_925x_b53313d4-1b99-48e1-98bc-c1d850803706.jpg?v=1661599289"
+                        alt="Product 1 Image" />
+                    <h3>Product 1</h3>
+                    <p class="proudct-price">$100.00</p>
+                    <div class="bundle-component-quantity" data-variant-id="43170708127959" data-variant-image="https://bhattmanoj97.myshopify.com/cdn/shop/products/bedroom-bed-with-brown-throw-pillows_925x_b53313d4-1b99-48e1-98bc-c1d850803706.jpg?v=1661599289"
+                    data-price="100.00">
+                     <a href="#" class="bundle-component-remove">
+                        <img src="./remove-btn.svg" alt="remove" width="36" height="35" />
+                        </a>
+                            <div class="bundle-component-quantity-selector">
+                            <button class="bundle-minus"><img src="./minus-btn.svg" alt="remove" width="36" height="35" />  </button>
+                            <input type="number"  name="bundle-component[43170710094039]" value="0" min="0" max="4">
+                            <button class="bundle-plus"><img src="./plus-btn.svg" alt="remove" width="36" height="35" /> </button>
+                            </div>
+                        </div>
+                </div>
+                <div class="bundle-product-item">
+                    <img src="https://bhattmanoj97.myshopify.com/cdn/shop/products/boho-earrings_925x_35d7841a-05ea-45ae-af39-278d096bcf69.jpg?v=1661599341"
+                        alt="Product 2 Image" />
+                    <h3 class="product-title">Product 2</h3>
+                    <p class="proudct-price">$200.00</p>
+                      <div class="bundle-component-quantity" data-variant-id="43170708127951" data-variant-image="https://bhattmanoj97.myshopify.com/cdn/shop/products/boho-earrings_925x_35d7841a-05ea-45ae-af39-278d096bcf69.jpg?v=1661599341" 
+                      data-price="200.00">
+                     <a href="#" class="bundle-component-remove">
+                        <img src="./remove-btn.svg" alt="remove" width="36" height="35" />
+                        </a>
+                            <div class="bundle-component-quantity-selector">
+                              <button class="bundle-minus"><img src="./minus-btn.svg" alt="remove" width="36" height="35" />  </button>
+                              <input type="number"  name="bundle-component[43170710094039]" value="0" min="0" max="4">
+                              <button class="bundle-plus"><img src="./plus-btn.svg" alt="remove" width="36" height="35" /> </button>
+                            </div>
+                        </div>
+                </div>
+                <div class="bundle-product-item">
+                    <img src="https://bhattmanoj97.myshopify.com/cdn/shop/products/bangle-bracelet-with-feathers_925x_bd2c3f9e-42a8-4350-b920-6bc1cd06d8fe.jpg?v=1661599338"
+                        alt="Product 3 Image" />
+                    <h3>Product 3</h3>
+                    <p class="proudct-price">$300.00</p>
+                      <div class="bundle-component-quantity" data-variant-id="43170708127952" data-variant-image="https://bhattmanoj97.myshopify.com/cdn/shop/products/bangle-bracelet-with-feathers_925x_bd2c3f9e-42a8-4350-b920-6bc1cd06d8fe.jpg?v=1661599338"
+                      data-price="300.00">
+                     <a href="#" class="bundle-component-remove">
+                        <img src="./remove-btn.svg" alt="remove" width="36" height="35" />
+                        </a>
+                            <div class="bundle-component-quantity-selector">
+                            <button class="bundle-minus"><img src="./minus-btn.svg" alt="remove" width="36" height="35" />  </button>
+                            <input type="number"  name="bundle-component[43170710094039]" value="0" min="0" max="4">
+                            <button class="bundle-plus"><img src="./plus-btn.svg" alt="remove" width="36" height="35" /> </button>
+                            </div>
+                        </div>
+                </div>
+                <div class="bundle-product-item">
+                    <img src="https://bhattmanoj97.myshopify.com/cdn/shop/products/man-adjusts-blue-tuxedo-bowtie_925x_36fda5f3-d75d-4041-9a3c-fe987d857af1.jpg?v=1661599242"
+                        alt="Product 4 Image" />
+                    <h3>Product 4</h3>
+                    <p class="proudct-price">$400.00</p>
+                      <div class="bundle-component-quantity" data-variant-id="43170708127954" data-variant-image="https://bhattmanoj97.myshopify.com/cdn/shop/products/man-adjusts-blue-tuxedo-bowtie_925x_36fda5f3-d75d-4041-9a3c-fe987d857af1.jpg?v=1661599242"
+                      data-price="400.00">
+                     <a href="#" class="bundle-component-remove">
+                        <img src="./remove-btn.svg" alt="remove" width="36" height="35" />
+                        </a>
+                            <div class="bundle-component-quantity-selector">
+                            <button class="bundle-minus"><img src="./minus-btn.svg" alt="remove" width="36" height="35" />  </button>
+                            <input type="number"  name="bundle-component[43170710094039]" value="0" min="0" max="4">
+                            <button class="bundle-plus"><img src="./plus-btn.svg" alt="remove" width="36" height="35" /> </button>
+                            </div>
+                        </div>
+                </div>
+            </div>       
+        </div>
+             <!-- cart items -->
+            <div class="bundle-collection-summary" id="bundle-collection-summary">
+                <h2>Build Your Own Bundle</h2>
+                <div class="bundle-selection bundle-selection-normal" data-bundle-components="3">
+                    <div class="bundle-selection-box"><span class="icon-bundle-bottle"></span></div>
+                    <div class="bundle-selection-box"><span class="icon-bundle-bottle"></span></div>
+                    <div class="bundle-selection-box"><span class="icon-bundle-bottle"></span></div>
+                    <div class="bundle-selection-box"><span class="icon-bundle-bottle"></span></div>
+                </div>
+                <div class="total-price">
+                    <span>Total Price: </span>
+                    <span class="bundle-total-price">$0.00</span>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+// Attach click listeners to all plus/minus buttons
+document.querySelectorAll('.bundle-component-quantity-selector button').forEach(componentQuantityButton => {
+  componentQuantityButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    const parents_div = e.target.closest(".bundle-component-quantity");
+    QtyButton(parents_div);
+  });
+});
+
+// Handle quantity increment/decrement
+function QtyButton(qty_btn) {
+  const clickedButton = event.target.closest('button');
+  if (!clickedButton) return;
+
+  const parentDiv = clickedButton.closest(".bundle-component-quantity");
+  const input = parentDiv.querySelector('input[type="number"]');
+  if (!input) return;
+
+  // Ensure input is enabled
+  input.disabled = false;
+
+  let currentValue = parseInt(input.value, 10) || 0; // fallback to 0 if NaN
+  const maxValue = parseInt(input.max, 10);
+  const minValue = parseInt(input.min, 10);
+
+  if (clickedButton.classList.contains("bundle-plus")) {
+    if (currentValue < maxValue) {
+      currentValue += 1;
+      input.value = currentValue;
+      console.log("plus");
+    }
+  } else if (clickedButton.classList.contains("bundle-minus")) {
+    if (currentValue > minValue) {
+      currentValue -= 1;
+      input.value = currentValue;
+      console.log("minus");
+    }
+  }
+
+  // Re-enable buttons based on updated value
+  const plusBtn = parentDiv.querySelector('.bundle-plus');
+  const minusBtn = parentDiv.querySelector('.bundle-minus');
+
+  plusBtn.disabled = currentValue >= maxValue;
+  minusBtn.disabled = currentValue <= minValue;
+
+  parentDiv.classList.add("selected");
+  input.classList.add("testttt");
+
+  refreshBundleBoxes();
+}
+
+// Rebuild image layout based on current quantities
+function refreshBundleBoxes() {
+  const bundleBoxes = document.querySelectorAll('.bundle-selection.bundle-selection-normal .bundle-selection-box');
+  const quantityComponents = document.querySelectorAll('.bundle-component-quantity');
+  console.log("quantityComponents",quantityComponents);
+
+  // Clear all boxes first
+  bundleBoxes.forEach(box => {
+    box.innerHTML = `<span class="icon-bundle-bottle"></span>`;
+
+    getTotalPrice(quantityComponents);
+  });
+
+
+//get total Selected Price
+function getTotalPrice(quantityComponents) {
+  let totalPrice = 0;
+  quantityComponents.forEach(component => {
+    const input = component.querySelector('input[type="number"]');
+    const quantity = parseInt(input.value, 10);
+    console.log("quantity",quantity);
+    const price = parseFloat(component.dataset.price) || 0;
+    totalPrice += quantity * price;
+    console.log("totalPrice",totalPrice);
+    document.querySelector('.bundle-total-price').textContent = `$${totalPrice.toFixed(2)}`;
+  });
+  return totalPrice.toFixed(2);
+}
+
+  let boxIndex = 0;
+
+  // Loop through each component and re-append images based on quantity
+  quantityComponents.forEach(component => {
+    const input = component.querySelector('input[type="number"]');
+    const quantity = parseInt(input.value, 10);
+    const dataImage = component.dataset.variantImage;
+
+    for (let i = 0; i < quantity; i++) {
+      if (boxIndex < bundleBoxes.length) {
+        bundleBoxes[boxIndex].innerHTML = `<img src="${dataImage}" alt="image">`;
+        boxIndex++;
+      }
+    }
+
+    // Enable/disable individual plus/minus buttons based on quantity
+    const plusBtn = component.querySelector('.bundle-plus');
+    const minusBtn = component.querySelector('.bundle-minus');
+    const maxValue = parseInt(input.max, 10);
+    const minValue = parseInt(input.min, 10);
+
+    plusBtn.disabled = quantity >= maxValue;
+    minusBtn.disabled = quantity <= minValue;
+  });
+
+  // If all boxes are filled, disable all plus buttons globally
+  const allFilled = boxIndex >= bundleBoxes.length;
+  document.querySelectorAll('.bundle-plus').forEach(btn => {
+    btn.disabled = allFilled;
+  });
+}
+document.querySelectorAll('.bundle-component-remove').forEach(removeBtn => {
+  removeBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    const parentDiv = e.target.closest(".bundle-component-quantity");
+    const input = parentDiv.querySelector('input[type="number"]');
+    if (!input) return;
+
+    // Set quantity to 0
+    input.value = 0;
+
+    // Disable plus/minus buttons
+    const plusBtn = parentDiv.querySelector('.bundle-plus');
+    const minusBtn = parentDiv.querySelector('.bundle-minus');
+    plusBtn.disabled = true;
+    minusBtn.disabled = true;
+
+    // Optional: visually mark as removed
+    parentDiv.classList.remove("selected");
+
+    // Refresh image layout
+    refreshBundleBoxes();
+  });
+});
+
+</script>
+</html>
